@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { COLORS, FONT, SIZES } from "../../../constants";
+import { COLORS, FONT, SIZES } from "../../constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontFamily: FONT.regular,
-    fontSize: SIZES.large,
+    fontSize: SIZES.h1,
     color: COLORS.secondary,
   },
   welcomeMessage: {
@@ -61,12 +61,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.small,
     borderRadius: SIZES.medium,
     borderWidth: 1,
-    borderColor: activeJobType === item ? COLORS.secondary : COLORS.gray2,
+    backgroundColor: activeJobType === item ? COLORS.lightPink : COLORS.lightWhite,
+    borderColor: activeJobType === item ? COLORS.gray : COLORS.gray2,
+
   }),
   tabText: (activeJobType, item) => ({
     fontFamily: FONT.medium,
     color: activeJobType === item ? COLORS.secondary : COLORS.gray2,
   }),
+
+  
+    quoteContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: COLORS.lightPink,
+      padding: 16,
+      borderRadius: 8,
+      marginBottom: 16,
+    },
+    welcomeMessage: {
+      flex: 1,
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: '#000',
+    },
+    quoteIcon: {
+      marginLeft: 8,
+    },
+
 });
 
 export default styles;
