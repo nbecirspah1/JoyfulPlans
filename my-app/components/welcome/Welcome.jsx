@@ -8,7 +8,6 @@ import {
   Image,
   FlatList,
 } from "react-native";
-
 import styles from "./welcome.style";
 import { icons, SIZES } from "../../constants";
 
@@ -21,6 +20,7 @@ const Welcome = () => {
         <Text style={styles.userName}>Zdravo nejla!</Text>
         <View style={styles.quoteContainer}>
           <Text style={styles.welcomeMessage}>Sretno sa novim zadacima!</Text>
+
           <FontAwesome
             name="smile-o"
             size={24}

@@ -20,7 +20,7 @@ export default function App() {
         />
         <Stack.Screen 
         options={{
-            headerStyle: {backgroundColor: COLORS.lightWhite},
+            headerStyle: {backgroundColor: COLORS.lavander},
             headerShadowVisible: false,
             headerLeft: () => (
                 <ScreenHeaderBtn iconUrl={icons.menu} dimensions = "60%"/>

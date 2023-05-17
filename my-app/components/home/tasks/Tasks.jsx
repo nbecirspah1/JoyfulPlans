@@ -1,24 +1,18 @@
-import { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 // import { useRouter } from "expo-router";
-import styles from "./importanttasks.style";
+import styles from "./tasks.style";
 import { COLORS, SIZES } from "../../../constants";
-import { ImportantTaskCard } from "../../";
 // import useFetch from "../../../hook/useFetch";
-const ImportantTasks = () => {
-  // const router = useRouter();
+import { TaskCard } from "../../";
+const Tasks = () => {
+  //   const router = useRouter();
   // const isLoading = false;
   // const error = false;
   // const { data, isLoading, error } = useFetch("search", {
   //   query: "React developer",
   //   num_pages: 1,
   // });
+  // console.log(data);
   const data = [
     {
       task_id: 1,
@@ -43,17 +37,10 @@ const ImportantTasks = () => {
   ];
   const isLoading = false;
   const error = false;
-
-  const [selectedTask, setSelectedTask] = useState();
-
-  const handleCardPress = (item) => {
-    // router.push(`/job-details/${item.job_id}`);
-    setSelectedTask(item.task_id);
-  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Važni zadaci</Text>
+        <Text style={styles.headerTitle}>Tasks</Text>
         <TouchableOpacity>
           <Text style={styles.headerBtn}>Prikaži sve</Text>
         </TouchableOpacity>
@@ -63,28 +50,23 @@ const ImportantTasks = () => {
         {isLoading ? (
           <ActivityIndicator size="large" colors={COLORS.primary} />
         ) : error ? (
-          <Text>Nešto nije uredu</Text>
+          <Text>Something went wrong</Text>
         ) : (
-          <FlatList
-            data={data}
-            renderItem={({ item }) => (
-              <ImportantTaskCard
-                item={item}
-                selectedTask={selectedTask}
-                handleCardPress={handleCardPress}
-              />
-              // <View>
-              //   <Text>{item.task_name}</Text>
-              // </View>
-            )}
-            keyExtractor={(item) => item?.task_id}
-            contentContainerStyle={{ columnGap: SIZES.medium }}
-            horizontal
-          />
+          data?.map((task) => (
+            <TaskCard
+              task={task}
+              key={`task-${task?.task_id}`}
+              handleNavigate={() =>
+                /*router.push(`/job-details/${job.job_id}`)*/ console.log(
+                  "Handle navigate"
+                )
+              }
+            />
+          ))
         )}
       </View>
     </View>
   );
 };
 
-export default ImportantTasks;
+export default Tasks;

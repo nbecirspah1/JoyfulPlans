@@ -12,7 +12,9 @@ const COLORS = {
   mintGreen: "#B2FAB4",
   lightPink: "#F7CAC9",
   teal: "#1ABC9C",
-  lavander: "#BDB2FF"
+  lavander: "#BDB2FF",
+  paleGreen: "#E3F1E3"
+  
 };
 
 const FONT = {

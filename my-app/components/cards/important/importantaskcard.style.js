@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   container: (selectedTask, item) => ({
     width: 250,
     padding: SIZES.xLarge,
-    backgroundColor: selectedTask === item.job_id ? COLORS.primary : "#FFF",
+    backgroundColor: selectedTask === item.task_id ? COLORS.paleGreen : "#FFF",
     borderRadius: SIZES.medium,
     justifyContent: "space-between",
     ...SHADOWS.medium,
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   logoContainer: (selectedTask, item) => ({
     width: 100,
     height: 100,
-    backgroundColor: selectedTask === item.job_id ? "#FFF" : COLORS.white,
+    backgroundColor: selectedTask === item.task_id ? "#FFF" : COLORS.white,
     borderRadius: SIZES.medium,
     justifyContent: "center",
     alignItems: "center",
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   jobName: (selectedTask, item) => ({
     fontSize: SIZES.large,
     fontFamily: FONT.medium,
-    color: selectedTask === item.job_id ? COLORS.white : COLORS.primary,
+    color: selectedTask === item.task_id ? COLORS.white : COLORS.paleGreen,
   }),
   infoWrapper: {
     flexDirection: "row",
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   publisher: (selectedTask) => ({
     fontSize: SIZES.medium - 2,
     fontFamily: FONT.bold,
-    color: selectedTask === item.job_id ? COLORS.white : COLORS.primary,
+    color: selectedTask === item.task_id ? COLORS.white : COLORS.paleGreen,
   }),
   location: {
     fontSize: SIZES.medium - 2,

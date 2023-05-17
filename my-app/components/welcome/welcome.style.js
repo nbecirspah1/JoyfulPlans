@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.small,
     borderRadius: SIZES.medium,
     borderWidth: 1,
-    backgroundColor: activeJobType === item ? COLORS.lightPink : COLORS.lightWhite,
+    backgroundColor: activeJobType === item ? COLORS.paleGreen : COLORS.lightWhite,
     borderColor: activeJobType === item ? COLORS.gray : COLORS.gray2,
 
   }),
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     quoteContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: COLORS.lightPink,
+      backgroundColor: "#A7A5FF",
       padding: 16,
       borderRadius: 8,
       marginBottom: 16,
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
       flex: 1,
       fontSize: 20,
       fontWeight: 'bold',
-      color: '#000',
+      color: COLORS.primary,
     },
     quoteIcon: {
       marginLeft: 8,

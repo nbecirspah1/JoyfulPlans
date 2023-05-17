@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   StyleSheet,
   Text,
@@ -9,6 +10,8 @@ import {
   Pressable,
   TouchableOpacity,
   ScrollView,
+  ImageBackground,
+  KeyboardAvoidingView,
 } from "react-native";
 import styles from "./loginregister.style";
 import Svg, { Image, Ellipse, ClipPath } from "react-native-svg";
@@ -104,10 +107,10 @@ export default function LoginRegister({ navigation }) {
             <Ellipse cx={width / 2} rx={height} ry={height} />
           </ClipPath>
           <Image
-            href={images.picture}
+            href={images.logo3}
             width={width}
-            height={height + 100}
-            preserveAspectRatio="xMidYMid slice"
+            height={height}
+            preserveAspectRatio="xMaxYMid slice"
             clipPath="url(#clipPathId)"
           />
         </Svg>
@@ -119,6 +122,7 @@ export default function LoginRegister({ navigation }) {
           onPress={() => {
             imagePosition.value = 1;
           }}
+          style={{ color: "#FFFFFF" }}
         >
           X
         </Text>

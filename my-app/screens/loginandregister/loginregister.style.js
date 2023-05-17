@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   button: {
-    backgroundColor: 'rgba(123,104,238,0.8)',
+    backgroundColor: "#BDB2FF",
     height: 55,
     alignItems: 'center',
     justifyContent: 'center',
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10
   },
   formButton: {
-    backgroundColor: 'rgba(123,104,238,0.8)',
+    backgroundColor: '#BDB2FF',
     height: 55,
     alignItems: 'center',
     justifyContent: 'center',
@@ -74,9 +74,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.34,
     shadowRadius: 6.27,
     elevation: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#444262',
     alignItems: 'center',
-    borderRadius: 20,
+    borderRadius: 50,
     top: -30
   }
 });
