@@ -4,6 +4,7 @@ import ImportantTaskCard from "./cards/important/ImportantTaskCard"
 import ImportantTasks from "./home/important/Importanttasks"
 import TaskCard from "./cards/task/TaskCard"
 import Tasks from "./home/tasks/Tasks"
+import VerticalProgressBar from "./cards/progress/VerticalProgressBar";
 
 
 
@@ -15,6 +16,7 @@ export {
   ImportantTaskCard, 
   ImportantTasks,
   Tasks,
-  TaskCard
+  TaskCard,
+  VerticalProgressBar
 
 };

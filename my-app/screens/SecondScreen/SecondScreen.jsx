@@ -15,7 +15,7 @@ export default function SecondScreen({ navigation }) {
         }}
       >
         <Welcome />
-        <ImportantTasks />
+        <ImportantTasks navigation={navigation} />
         <Tasks />
       </View>
     </ScrollView>

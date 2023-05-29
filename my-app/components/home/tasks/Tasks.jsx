@@ -18,21 +18,25 @@ const Tasks = () => {
       task_id: 1,
       task_name: "Complete project report",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
+      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
     },
     {
       task_id: 2,
       task_name: "Prepare for meeting",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
+      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
     },
     {
       task_id: 3,
       task_name: "Follow up with clients",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
+      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
     },
     {
       task_id: 4,
       task_name: "Organize files",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
+      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
     },
   ];
   const isLoading = false;

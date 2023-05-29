@@ -10,7 +10,10 @@ const ImportantTaskCard = ({ item, selectedTask, handleCardPress }) => {
       style={styles.container(selectedTask, item)}
       onPress={() => handleCardPress(item)}
     >
-      <TouchableOpacity style={styles.logoContainer(selectedTask, item)}>
+      <TouchableOpacity
+        style={styles.logoContainer(selectedTask, item)}
+        onPress={() => handleCardPress(item)}
+      >
         <Image
           source={
             // {

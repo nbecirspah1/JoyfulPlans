@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {ScreenHeaderBtn} from '../components'
 
 import SecondScreen from "../screens/SecondScreen/SecondScreen";
+import SelectedTaskScreen from "../screens/SelectedTaskScreen/SelectedTaskScreen"
 const Stack = createNativeStackNavigator();
 import {COLORS, images, icons} from "../constants"
 
@@ -32,7 +33,22 @@ export default function App() {
           name="Home"
           component={SecondScreen}
         />
+      <Stack.Screen 
+        options={{
+            headerStyle: {backgroundColor: COLORS.lavander},
+            headerShadowVisible: false,
+            headerLeft: () => (
+                <ScreenHeaderBtn iconUrl={icons.menu} dimensions = "60%"/>
+            ),
+            headerRight: () => (
+                <ScreenHeaderBtn iconUrl={images.profile} dimensions = "100%"/>
+            ),
+            headerTitle: ""}}
+          name="SelectedTask"
+          component={SelectedTaskScreen}
+        />
       </Stack.Navigator>
+    
     </NavigationContainer>
   )
 }

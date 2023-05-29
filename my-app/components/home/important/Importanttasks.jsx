@@ -11,7 +11,7 @@ import styles from "./importanttasks.style";
 import { COLORS, SIZES } from "../../../constants";
 import { ImportantTaskCard } from "../../";
 // import useFetch from "../../../hook/useFetch";
-const ImportantTasks = () => {
+const ImportantTasks = ({ navigation }) => {
   // const router = useRouter();
   // const isLoading = false;
   // const error = false;
@@ -24,21 +24,99 @@ const ImportantTasks = () => {
       task_id: 1,
       task_name: "Complete project report",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
+      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
+      subtasks: [
+        {
+          task_id: 1,
+          task_name: "1. podtask",
+          description: "1.opis",
+          done: false,
+        },
+        {
+          task_id: 2,
+          task_name: "2. podtask",
+          description: "2.opis",
+          done: false,
+        },
+        {
+          task_id: 3,
+          task_name: "3. podtask",
+          description: "3.opis",
+          done: false,
+        },
+        {
+          task_id: 4,
+          task_name: "4. podtask",
+          description: "4.opis",
+          done: false,
+        },
+        {
+          task_id: 5,
+          task_name: "5. podtask",
+          description: "5.opis",
+          done: false,
+        },
+      ],
     },
     {
       task_id: 2,
       task_name: "Prepare for meeting",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
+      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
+      subtasks: [
+        {
+          task_id: 1,
+          task_name: "1. podtask",
+          description: "1.opis",
+          done: false,
+        },
+        {
+          task_id: 2,
+          task_name: "2. podtask",
+          description: "2.opis",
+          done: false,
+        },
+      ],
     },
     {
       task_id: 3,
       task_name: "Follow up with clients",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
+      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
+      subtasks: [
+        {
+          task_id: 1,
+          task_name: "1. podtask",
+          description: "1.opis",
+          done: false,
+        },
+        {
+          task_id: 2,
+          task_name: "2. podtask",
+          description: "2.opis",
+          done: false,
+        },
+      ],
     },
     {
       task_id: 4,
       task_name: "Organize files",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
+      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
+      subtasks: [
+        {
+          task_id: 1,
+          task_name: "1. podtask",
+          description: "1.opis",
+          done: false,
+        },
+        {
+          task_id: 2,
+          task_name: "2. podtask",
+          description: "2.opis",
+          done: false,
+        },
+      ],
     },
   ];
   const isLoading = false;
@@ -49,6 +127,8 @@ const ImportantTasks = () => {
   const handleCardPress = (item) => {
     // router.push(`/job-details/${item.job_id}`);
     setSelectedTask(item.task_id);
+    // formButtonScale.value = withSequence(withSpring(1.5), withSpring(1));
+    navigation.navigate("SelectedTask", { data: item });
   };
   return (
     <View style={styles.container}>
