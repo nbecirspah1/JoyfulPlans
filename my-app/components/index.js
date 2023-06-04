@@ -5,6 +5,8 @@ import ImportantTasks from "./home/important/Importanttasks"
 import TaskCard from "./cards/task/TaskCard"
 import Tasks from "./home/tasks/Tasks"
 import VerticalProgressBar from "./cards/progress/VerticalProgressBar";
+import CustomDrawer from "./drawer/CustomDrawer";
+import UserView from "./drawer/UserView";
 
 
 
@@ -17,6 +19,8 @@ export {
   ImportantTasks,
   Tasks,
   TaskCard,
-  VerticalProgressBar
+  VerticalProgressBar,
+  CustomDrawer,
+  UserView
 
 };

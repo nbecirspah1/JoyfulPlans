@@ -9,6 +9,8 @@ import {
 // import { useRouter } from "expo-router";
 import styles from "./importanttasks.style";
 import { COLORS, SIZES } from "../../../constants";
+import { useNavigation } from "@react-navigation/native";
+
 import { ImportantTaskCard } from "../../";
 // import useFetch from "../../../hook/useFetch";
 const ImportantTasks = ({ navigation }) => {
@@ -128,7 +130,11 @@ const ImportantTasks = ({ navigation }) => {
     // router.push(`/job-details/${item.job_id}`);
     setSelectedTask(item.task_id);
     // formButtonScale.value = withSequence(withSpring(1.5), withSpring(1));
-    navigation.navigate("SelectedTask", { data: item });
+    // navigation.navigate("SelectedTask", { data: item });
+    navigation.navigate("NestedDrawer", {
+      screen: "SelectedTask",
+      params: { data: item },
+    });
   };
   return (
     <View style={styles.container}>
