@@ -5,6 +5,7 @@ import { View, ScrollView, SafeAreaView, Image } from "react-native";
 import { COLORS, SIZES, images } from "../../constants";
 
 export default function SecondScreen({ navigation }) {
+  const [activeTaskType2, setActiveTaskType2] = useState("Sve");
   return (
     <ScrollView showVerticalScrollIndicator={false}>
       <View
@@ -14,8 +15,11 @@ export default function SecondScreen({ navigation }) {
           backgroundColor: COLORS.lavander,
         }}
       >
-        <Welcome />
-        <ImportantTasks navigation={navigation} />
+        <Welcome setActiveTaskType2={setActiveTaskType2} />
+        <ImportantTasks
+          navigation={navigation}
+          activeTaskType2={activeTaskType2}
+        />
         <Tasks />
       </View>
     </ScrollView>

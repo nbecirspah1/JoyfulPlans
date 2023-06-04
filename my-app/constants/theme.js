@@ -12,7 +12,7 @@ const COLORS = {
   mintGreen: "#B2FAB4",
   lightPink: "#F7CAC9",
   teal: "#1ABC9C",
-  lavander: "#BDB2FF",
+  lavander: "#d0e051",
   paleGreen: "#E3F1E3"
   
 };

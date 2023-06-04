@@ -10,10 +10,9 @@ import {
 import styles from "./importanttasks.style";
 import { COLORS, SIZES } from "../../../constants";
 import { useNavigation } from "@react-navigation/native";
-
 import { ImportantTaskCard } from "../../";
 // import useFetch from "../../../hook/useFetch";
-const ImportantTasks = ({ navigation }) => {
+const ImportantTasks = ({ navigation, activeTaskType2 }) => {
   // const router = useRouter();
   // const isLoading = false;
   // const error = false;
@@ -21,12 +20,14 @@ const ImportantTasks = ({ navigation }) => {
   //   query: "React developer",
   //   num_pages: 1,
   // });
+  // const activeTaskType = useState(getActiveTaskType());
   const data = [
     {
       task_id: 1,
       task_name: "Complete project report",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
+      date: "04/06/2023",
       subtasks: [
         {
           task_id: 1,
@@ -65,6 +66,7 @@ const ImportantTasks = ({ navigation }) => {
       task_name: "Prepare for meeting",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
+      date: "04/06/2023",
       subtasks: [
         {
           task_id: 1,
@@ -85,6 +87,7 @@ const ImportantTasks = ({ navigation }) => {
       task_name: "Follow up with clients",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
+      date: "06/06/2023",
       subtasks: [
         {
           task_id: 1,
@@ -105,6 +108,7 @@ const ImportantTasks = ({ navigation }) => {
       task_name: "Organize files",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
+      date: "15/06/2023",
       subtasks: [
         {
           task_id: 1,
@@ -123,9 +127,43 @@ const ImportantTasks = ({ navigation }) => {
   ];
   const isLoading = false;
   const error = false;
+  const currentDate = new Date();
 
+  const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+  const formattedCurrentDate = currentDate.toLocaleDateString("en-GB", options);
+
+  // Get the start and end dates of the current week
+
+  const firstDayOfWeek = new Date(currentDate);
+  const dayOfWeek = currentDate.getDay();
+
+  // Adjust the day to Monday (1) if it's Sunday (0)
+  if (dayOfWeek === 0) {
+    firstDayOfWeek.setDate(currentDate.getDate() - 6);
+  } else {
+    firstDayOfWeek.setDate(currentDate.getDate() - (dayOfWeek - 1));
+  }
+
+  console.log("FIRST DAY OF WEEK", firstDayOfWeek);
+
+  const lastDayOfWeek = new Date(firstDayOfWeek);
+  lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6);
+
+  const filteredData = data.filter((item) => {
+    if (activeTaskType2 === "Danas") {
+      return formattedCurrentDate === item.date;
+    } else if (activeTaskType2 === "Sedmica") {
+      const [day, month, year] = item.date.split("/");
+      const taskDate = new Date(year, month - 1, day);
+
+      return taskDate >= firstDayOfWeek && taskDate <= lastDayOfWeek;
+    } else if (activeTaskType2 === "Sve") {
+      return true; // Include all items when "Sve" is selected
+    } else {
+      return false; // Exclude all other cases
+    }
+  });
   const [selectedTask, setSelectedTask] = useState();
-
   const handleCardPress = (item) => {
     // router.push(`/job-details/${item.job_id}`);
     setSelectedTask(item.task_id);
@@ -141,7 +179,7 @@ const ImportantTasks = ({ navigation }) => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Važni zadaci</Text>
         <TouchableOpacity>
-          <Text style={styles.headerBtn}>Prikaži sve</Text>
+          <Text style={styles.headerBtn}>{activeTaskType2}</Text>
         </TouchableOpacity>
       </View>
 
@@ -152,7 +190,7 @@ const ImportantTasks = ({ navigation }) => {
           <Text>Nešto nije uredu</Text>
         ) : (
           <FlatList
-            data={data}
+            data={filteredData}
             renderItem={({ item }) => (
               <ImportantTaskCard
                 item={item}

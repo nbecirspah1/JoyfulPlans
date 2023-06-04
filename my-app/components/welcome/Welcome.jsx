@@ -11,13 +11,14 @@ import {
 import styles from "./welcome.style";
 import { icons, SIZES } from "../../constants";
 
-const taskTypes = ["Higijena", "Kućni poslovi", "Škola"];
-const Welcome = () => {
-  const [activeTaskType, setActiveTaskType] = useState("Škola");
+const taskTypes = ["Danas", "Sedmica", "Sve"];
+
+const Welcome = ({ setActiveTaskType2 }) => {
+  const [activeTaskType, setActiveTaskType] = useState("Sve");
   return (
     <View>
       <View style={styles.container}>
-        <Text style={styles.userName}>Zdravo nejla!</Text>
+        <Text style={styles.userName}>Zdravo, Nejla!</Text>
         <View style={styles.quoteContainer}>
           <Text style={styles.welcomeMessage}>Sretno sa novim zadacima!</Text>
 
@@ -29,24 +30,6 @@ const Welcome = () => {
           />
         </View>
       </View>
-      {/* <View style={styles.searchhello}>
-        <View style={styles.searchWrapper}>
-          <TextInput
-            style={styles.searchInput}
-            value=""
-            onChange={() => {}}
-            placeholder="What are you looking for?"
-          ></TextInput>
-        </View>
-        <TouchableOpacity style={styles.searchBtn} onPress={() => {}}>
-          <Image
-            source={icons.search}
-            resizeMode="contain"
-            style={styles.searchBtnImage}
-          ></Image>
-        </TouchableOpacity>
-      </View> */}
-
       <View style={styles.tabsContainer}>
         <FlatList
           data={taskTypes}
@@ -55,6 +38,7 @@ const Welcome = () => {
               style={styles.tab(activeTaskType, item)}
               onPress={() => {
                 setActiveTaskType(item);
+                setActiveTaskType2(item);
                 // router.push(`/search/${item}`);
               }}
             >
