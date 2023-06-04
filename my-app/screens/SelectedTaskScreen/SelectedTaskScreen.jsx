@@ -25,6 +25,7 @@ import { FONT, SIZES, COLORS } from "../../constants";
 const SelectedTaskScreen = () => {
   const route = useRoute();
   const receivedData = route.params?.data;
+  console.log("RECEIVEEED DATAAA", receivedData);
   // const numItems = receivedData.subtasks.length(); // Number of progressBarItems
 
   const spin = useSharedValue(0);

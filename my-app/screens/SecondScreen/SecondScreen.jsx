@@ -20,7 +20,7 @@ export default function SecondScreen({ navigation }) {
           navigation={navigation}
           activeTaskType2={activeTaskType2}
         />
-        <Tasks />
+        <Tasks navigation={navigation} activeTaskType2={activeTaskType2} />
       </View>
     </ScrollView>
   );

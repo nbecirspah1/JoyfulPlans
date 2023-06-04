@@ -188,6 +188,8 @@ const ImportantTasks = ({ navigation, activeTaskType2 }) => {
           <ActivityIndicator size="large" colors={COLORS.primary} />
         ) : error ? (
           <Text>Nešto nije uredu</Text>
+        ) : filteredData.length === 0 ? (
+          <Text>Nema novih zadataka</Text>
         ) : (
           <FlatList
             data={filteredData}

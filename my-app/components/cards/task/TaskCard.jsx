@@ -3,13 +3,19 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 
 import styles from "./taskcard.style";
 // import { checkImageURL } from "../../../../utils";
-const TaskCard = ({ task, handleNavigate }) => {
+const TaskCard = ({ item, task, handleCardPress }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={handleNavigate}>
-      <TouchableOpacity style={styles.logoContainer}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => handleCardPress(item)}
+    >
+      <TouchableOpacity
+        style={styles.logoContainer}
+        onPress={() => handleCardPress(item)}
+      >
         <Image
           source={
-            task.employer_logo
+            item.employer_logo
 
             // {
             // uri: checkImageURL(task.employer_logo)
@@ -23,7 +29,7 @@ const TaskCard = ({ task, handleNavigate }) => {
       </TouchableOpacity>
       <View style={styles.textContainer}>
         <Text style={styles.jobName} numberOfLines={1}>
-          {task.task_name}
+          {item.task_name}
         </Text>
         {/* <Text style={styles.jobType}>{task.job_employment_type}</Text> */}
       </View>
