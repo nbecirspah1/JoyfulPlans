@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,7 +12,11 @@ import { COLORS, SIZES } from "../../../constants";
 import { useNavigation } from "@react-navigation/native";
 import { ImportantTaskCard } from "../../";
 // import useFetch from "../../../hook/useFetch";
-const ImportantTasks = ({ navigation, activeTaskType2 }) => {
+const ImportantTasks = ({
+  navigation,
+  activeTaskType2,
+  setNumberOfImportantTasks,
+}) => {
   // const router = useRouter();
   // const isLoading = false;
   // const error = false;
@@ -163,6 +167,11 @@ const ImportantTasks = ({ navigation, activeTaskType2 }) => {
       return false; // Exclude all other cases
     }
   });
+
+  useEffect(() => {
+    setNumberOfImportantTasks(filteredData.length);
+  }, [filteredData]);
+
   const [selectedTask, setSelectedTask] = useState();
   const handleCardPress = (item) => {
     // router.push(`/job-details/${item.job_id}`);

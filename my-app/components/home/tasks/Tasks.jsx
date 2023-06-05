@@ -1,11 +1,11 @@
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 // import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./tasks.style";
 import { COLORS, SIZES } from "../../../constants";
 // import useFetch from "../../../hook/useFetch";
 import { TaskCard } from "../../";
-const Tasks = ({ navigation, activeTaskType2 }) => {
+const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks }) => {
   //   const router = useRouter();
   // const isLoading = false;
   // const error = false;
@@ -158,6 +158,9 @@ const Tasks = ({ navigation, activeTaskType2 }) => {
       return false; // Exclude all other cases
     }
   });
+  useEffect(() => {
+    setNumberOfTasks(filteredData.length);
+  }, [filteredData]);
 
   const handleCardPress = (item) => {
     // router.push(`/job-details/${item.job_id}`);

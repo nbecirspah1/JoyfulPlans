@@ -6,6 +6,18 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
   },
+  containerGreet: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    marginRight: 16,
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+  },
   userName: {
     fontFamily: FONT.regular,
     fontSize: SIZES.h1,
@@ -13,7 +25,7 @@ const styles = StyleSheet.create({
   },
   welcomeMessage: {
     fontFamily: FONT.bold,
-    fontSize: SIZES.xLarge,
+    fontSize: SIZES.h2,
     color: COLORS.primary,
     marginTop: 2,
   },
@@ -61,33 +73,45 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.small,
     borderRadius: SIZES.medium,
     borderWidth: 1,
-    backgroundColor: activeJobType === item ? COLORS.paleGreen : COLORS.lightWhite,
-    borderColor: activeJobType === item ? COLORS.gray : COLORS.gray2,
+    backgroundColor: activeJobType === item ? "#f57db1" : "#f0b9d0",
+    borderColor: activeJobType === item ? COLORS.primary : "#f57db1",
 
   }),
   tabText: (activeJobType, item) => ({
     fontFamily: FONT.medium,
-    color: activeJobType === item ? COLORS.secondary : COLORS.gray2,
+    color: activeJobType === item ? COLORS.primary : COLORS.gray,
   }),
 
   
-    quoteContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: "#A7A5FF",
-      padding: 16,
-      borderRadius: 8,
-      marginBottom: 16,
-    },
-    welcomeMessage: {
-      flex: 1,
-      fontSize: 20,
-      fontWeight: 'bold',
-      color: COLORS.primary,
-    },
-    quoteIcon: {
-      marginLeft: 8,
-    },
+  quoteContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: "#f57db1",
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 16,
+    width: '60%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  
+  
+  
+  quoteIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  
+  welcomeMessage: {
+    fontSize: 60,
+    fontWeight: 'bold',
+    color: COLORS.primary,
+    alignSelf: 'center',
+    textAlign: 'center',
+    flex: 1,
+  }
+  
 
 });
 

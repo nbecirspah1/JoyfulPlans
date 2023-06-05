@@ -6,6 +6,8 @@ import { COLORS, SIZES, images } from "../../constants";
 
 export default function SecondScreen({ navigation }) {
   const [activeTaskType2, setActiveTaskType2] = useState("Sve");
+  const [numberOfImportantTasks, setNumberOfImportantTasks] = useState(0);
+  const [numberOfTasks, setNumberOfTasks] = useState(0);
   return (
     <ScrollView showVerticalScrollIndicator={false}>
       <View
@@ -15,12 +17,21 @@ export default function SecondScreen({ navigation }) {
           backgroundColor: COLORS.lavander,
         }}
       >
-        <Welcome setActiveTaskType2={setActiveTaskType2} />
+        <Welcome
+          setActiveTaskType2={setActiveTaskType2}
+          numberOfImportantTasks={numberOfImportantTasks}
+          numberOfTasks={numberOfTasks}
+        />
         <ImportantTasks
           navigation={navigation}
           activeTaskType2={activeTaskType2}
+          setNumberOfImportantTasks={setNumberOfImportantTasks}
         />
-        <Tasks navigation={navigation} activeTaskType2={activeTaskType2} />
+        <Tasks
+          navigation={navigation}
+          activeTaskType2={activeTaskType2}
+          setNumberOfTasks={setNumberOfTasks}
+        />
       </View>
     </ScrollView>
   );
