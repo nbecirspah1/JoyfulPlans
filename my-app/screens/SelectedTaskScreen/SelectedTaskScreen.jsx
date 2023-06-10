@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  Dimensions,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -54,6 +55,15 @@ const SelectedTaskScreen = () => {
     };
   }, []);
   const [progressValue, setProgressValue] = useState(0);
+  const [previousProgressValue, setPreviousProgressValue] = useState(0);
+  let zadatakPadezi = "zadataka";
+  if (
+    receivedData.subtasks.length === 2 ||
+    receivedData.subtasks.length === 3 ||
+    receivedData.subtasks.length === 4
+  ) {
+    zadatakPadezi = "zadatka";
+  }
 
   // useEffect(() => {
   //   const numItems = receivedData.subtasks.filter(
@@ -61,92 +71,148 @@ const SelectedTaskScreen = () => {
   //   ).length;
   //   setProgressValue((numItems + 1) / receivedData.subtasks.length);
   // }, [receivedData.subtasks]);
+  const { height } = Dimensions.get("window");
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        backgroundColor: COLORS.lavander, // Set your desired background color
-      }}
-    >
-      <ModalPopup visible={visible}>
-        <View style={{ alignItems: "center" }}>
-          <View style={styles.header}>
-            <TouchableOpacity
-              onPress={() => {
-                setVisible(false);
-              }}
-            >
-              <Image
-                source={images.logo2}
-                style={{ height: 30, width: 30 }}
-              ></Image>
-            </TouchableOpacity>
-          </View>
-          <DonutChart progress={progressValue} />
-          <Text
-            style={{ marginVertical: 30, fontSize: 20, textAlign: "center" }}
-          >
-            Čestitamo, uradili ste podtask!
-          </Text>
-        </View>
-      </ModalPopup>
-      <Text
-        style={{
-          fontFamily: FONT.regular,
-          fontSize: SIZES.h1,
-          color: COLORS.primary,
-          marginBottom: 30,
-        }}
-      >
-        {receivedData.task_name}
-      </Text>
-      <TouchableOpacity
-        onPress={handleImagePress}
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Animated.View style={[styles.front, frontAnimatedStyle]}>
-          <Image
-            source={receivedData.employer_logo}
-            style={styles.image}
-            resizeMode="contain"
-          />
-        </Animated.View>
-        <Animated.View style={[styles.back(receivedData), backAnimatedStyle]}>
-          <Text style={styles.textBack}>{receivedData.description}</Text>
-        </Animated.View>
-      </TouchableOpacity>
+    <View style={{ flex: 1 }}>
       <ScrollView
-        horizontal
-        contentContainerStyle={{
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
       >
         <View
           style={{
-            flexDirection: "row",
+            flex: 1,
+            minHeight: height,
+            padding: SIZES.xSmall,
+            backgroundColor: COLORS.lavander,
           }}
         >
-          {receivedData.subtasks.map((subtask, index) => (
-            <View key={index}>
-              {/* <Text style={{ width: 100, alignSelf: "center" }}>
+          <ModalPopup visible={visible}>
+            <View style={{ alignItems: "center" }}>
+              <View style={styles.header}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setVisible(false);
+                  }}
+                >
+                  <Image
+                    source={images.logo2}
+                    style={{ height: 30, width: 30 }}
+                  ></Image>
+                </TouchableOpacity>
+              </View>
+              <DonutChart
+                progress={progressValue}
+                previousProgressValue={previousProgressValue}
+              />
+              <Text
+                style={{
+                  marginVertical: 30,
+                  fontSize: 20,
+                  textAlign: "center",
+                }}
+              >
+                Čestitamo, uradili ste{" "}
+                {progressValue * receivedData.subtasks.length} od{" "}
+                {receivedData.subtasks.length} {zadatakPadezi}!
+              </Text>
+            </View>
+          </ModalPopup>
+          <Text
+            style={{
+              // fontFamily: FONT.regular,
+              fontSize: SIZES.h1,
+              color: COLORS.primary,
+              marginBottom: 5,
+              fontWeight: 700,
+              // marginLeft: 10,
+            }}
+          >
+            {receivedData.task_name}
+          </Text>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <FontAwesome
+              name="calendar-o"
+              size={20}
+              color="#006E61"
+              style={{ marginBottom: 20, fontWeight: 700 }}
+            />
+            <Text
+              style={{
+                fontFamily: FONT.regular,
+                fontSize: SIZES.h4,
+                color: "#006E61",
+                marginBottom: 20,
+                fontWeight: 500,
+                marginLeft: 10,
+              }}
+            >
+              Uraditi do: {receivedData.date}
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            onPress={handleImagePress}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Animated.View style={[styles.front, frontAnimatedStyle]}>
+              <Image
+                source={receivedData.employer_logo}
+                style={styles.image}
+                resizeMode="contain"
+              />
+            </Animated.View>
+            <Animated.View
+              style={[styles.back(receivedData), backAnimatedStyle]}
+            >
+              <Text style={styles.textBack}>{receivedData.description}</Text>
+            </Animated.View>
+          </TouchableOpacity>
+          <ScrollView
+            horizontal
+            contentContainerStyle={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            showsHorizontalScrollIndicator={false}
+          >
+            <View>
+              <Text
+                style={{
+                  fontSize: SIZES.h3,
+                  color: COLORS.primary,
+                  marginBottom: 10,
+                  fontWeight: 600,
+                }}
+              >
+                Lista zadataka:
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                }}
+              >
+                {receivedData.subtasks.map((subtask, index) => (
+                  <View key={index}>
+                    {/* <Text style={{ width: 100, alignSelf: "center" }}>
                 {subtask.task_name}
               </Text> */}
-              <VerticalProgressBar
-                item={subtask}
-                setVisible={setVisible}
-                visible={visible}
-                receivedData={receivedData}
-                setProgressValue={setProgressValue}
-              />
+                    <VerticalProgressBar
+                      item={subtask}
+                      setVisible={setVisible}
+                      visible={visible}
+                      receivedData={receivedData}
+                      setProgressValue={setProgressValue}
+                      setPreviousProgressValue={setPreviousProgressValue}
+                    />
+                  </View>
+                ))}
+              </View>
             </View>
-          ))}
+          </ScrollView>
         </View>
       </ScrollView>
     </View>
@@ -173,12 +239,7 @@ const styles = StyleSheet.create({
   back: (item) => ({
     height: 200,
     width: 200,
-    backgroundColor:
-      item.task_type === "kuća"
-        ? "#FBEA73"
-        : item.task_type === "higijena"
-        ? "#D4ADF8"
-        : COLORS.lightWhite,
+    backgroundColor: "#FAFBE7",
     borderRadius: 16,
     backfaceVisibility: "hidden",
     alignItems: "center",
@@ -188,7 +249,7 @@ const styles = StyleSheet.create({
   }),
   textBack: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 500,
     color: COLORS.primary,
     textAlign: "center",
   },

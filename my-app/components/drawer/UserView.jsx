@@ -21,13 +21,13 @@ const UserView = () => {
           width: 80,
           height: 80,
           borderRadius: 40,
-          borderColor: "#FFF",
+          borderColor: COLORS.primary,
           borderWidth: 4,
           marginBottom: 10,
         }}
       />
-      <Title style={{ color: COLORS.lightWhite }}>Username</Title>
-      <Caption style={{ color: COLORS.lightWhite }}>Hello!</Caption>
+      <Title style={{ color: COLORS.primary }}>Username</Title>
+      <Caption style={{ color: COLORS.primary }}>Hello!</Caption>
     </View>
   );
 };

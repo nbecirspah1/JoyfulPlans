@@ -13,14 +13,14 @@ import { ReText } from "react-native-redash";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-const DonutChart = ({ progress }) => {
+const DonutChart = ({ progress, previousProgressValue }) => {
   const CIRCUMFERENCE = 700;
   const R = CIRCUMFERENCE / (2 * Math.PI);
   const STROKE_WIDTH = 20;
   const HALF_CIRCLE = R + STROKE_WIDTH;
   const DIAMETER = HALF_CIRCLE * 2;
 
-  const progressValue = useSharedValue(0);
+  const progressValue = useSharedValue(previousProgressValue);
   useEffect(() => {
     if (!progress) {
       progressValue.value = withTiming(0, { duration: 2000 });
@@ -50,7 +50,7 @@ const DonutChart = ({ progress }) => {
         height={DIAMETER}
         viewBox={`0 0 ${DIAMETER} ${DIAMETER}`}
       >
-        <G origin={`${HALF_CIRCLE}, ${HALF_CIRCLE}`} rotation={"-90"}>
+        <G origin={`${HALF_CIRCLE}, ${HALF_CIRCLE}`} rotation={-90}>
           <AnimatedCircle
             animatedProps={animatedProps}
             fill={"transparent"}

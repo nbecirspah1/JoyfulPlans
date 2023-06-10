@@ -9,11 +9,12 @@ const COLORS = {
   white: "#F3F4F8",
   lightWhite: "#FAFAFC",
   lightBlue: "#A2DFFF",
-  mintGreen: "#B2FAB4",
+  mintGreen: "#FAFBE7",
   lightPink: "#F7CAC9",
   teal: "#1ABC9C",
   lavander: "#d0e051",
-  paleGreen: "#E3F1E3"
+  paleGreen: "#E3F1E3",
+  icon: "#f57db1"
   
 };
 

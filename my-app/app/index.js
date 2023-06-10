@@ -30,13 +30,13 @@ function MyDrawer() {
       headerStyle: {
         backgroundColor: COLORS.lavander, //Set Header color
       },
-      headerTintColor: '#fff', //Set Header text color
+      headerTintColor: COLORS.primary, //Set Header text color
       headerTitleStyle: {
         fontWeight: 'bold', //Set Header text style
       },
       drawerType: drawerType,
-      drawerActiveTintColor: COLORS.lightWhite,
-      drawerInactiveTintColor: COLORS.lightWhite,
+      drawerActiveTintColor: COLORS.primary,
+      drawerInactiveTintColor: COLORS.primary,
     }}>
      <Drawer.Screen
   options={{
@@ -82,13 +82,13 @@ function MyDrawer1() {
       headerStyle: {
         backgroundColor: COLORS.lavander, //Set Header color
       },
-      headerTintColor: '#fff', //Set Header text color
+      headerTintColor: COLORS.primary, //Set Header text color
       headerTitleStyle: {
         fontWeight: 'bold', //Set Header text style
       },
       drawerType: drawerType,
-      drawerActiveTintColor: COLORS.lightWhite,
-      drawerInactiveTintColor: COLORS.lightWhite,
+      drawerActiveTintColor: COLORS.primary,
+      drawerInactiveTintColor: COLORS.primary,
     }}>
       <Drawer.Screen options={{
           drawerIcon: ({ color, size }) => (

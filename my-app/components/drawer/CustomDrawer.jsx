@@ -29,15 +29,15 @@ const CustomDrawer = (props) => {
     <View style={{ flex: 1 }}>
       <UserView />
       <DrawerContentScrollView>
-        <DrawerItemList {...props} drawerActiveTintColor={COLORS.lightWhite} />
+        <DrawerItemList {...props} drawerActiveTintColor={COLORS.primary} />
       </DrawerContentScrollView>
       <DrawerItem
         label="logout"
         icon={({ size, color }) => (
           <FontAwesome name="sign-out" size={size} color={color} />
         )}
-        activeTintColor={COLORS.lightWhite}
-        inactiveTintColor={COLORS.lightWhite}
+        activeTintColor={COLORS.primary}
+        inactiveTintColor={COLORS.primary}
       />
     </View>
     // </View>

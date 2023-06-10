@@ -11,36 +11,35 @@ import { SIZES, FONT, COLORS } from "../../../constants";
 const VerticalProgressBar = ({
   item,
   setVisible,
-  visible,
   receivedData,
   setProgressValue,
+  setPreviousProgressValue,
 }) => {
   const containerColor = useSharedValue(
-    item.done ? COLORS.mintGreen : "lightgray"
+    item.done ? COLORS.mintGreen : "#ACAC9A"
   );
-  const [iconColor, setIconColor] = useState(item.done ? "green" : "gray");
-  // useEffect(() => {
-  //   const numItems = receivedData.subtasks.filter(
-  //     (item) => item.done === true
-  //   ).length;
-  //   setProgressValue((numItems + 1) / receivedData.subtasks.length);
-  // }, [receivedData.subtasks]);
+  const [iconColor, setIconColor] = useState(
+    item.done ? COLORS.icon : "#474838"
+  );
+  const [fontWeight, setFontWeight] = useState(item.done ? 500 : 300);
 
   useEffect(() => {
     if (item.done) {
       containerColor.value = COLORS.mintGreen;
-      setIconColor("green");
+      setIconColor(COLORS.icon);
+      setFontWeight(500);
     }
     const numItems = receivedData.subtasks.filter(
       (item) => item.done === true
     ).length;
     setProgressValue(numItems / receivedData.subtasks.length);
+    setPreviousProgressValue((numItems - 1) / receivedData.subtasks.length);
   }, [item.done]);
   const handleClick = () => {
     if (!item.done) {
       containerColor.value = COLORS.mintGreen; // Change the color when container is clicked
-      setIconColor("green");
-
+      setIconColor(COLORS.icon);
+      setFontWeight(500);
       item.done = true;
       setVisible(true);
     }
@@ -78,6 +77,7 @@ const VerticalProgressBar = ({
         style={{
           fontSize: 16,
           textAlign: "center",
+          fontWeight: fontWeight,
         }}
       >
         {item.task_name}
