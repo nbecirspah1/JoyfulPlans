@@ -55,12 +55,12 @@ const SelectedTaskScreen = () => {
   }, []);
   const [progressValue, setProgressValue] = useState(0);
 
-  useEffect(() => {
-    const numItems = receivedData.subtasks.filter(
-      (item) => item.done === true
-    ).length;
-    setProgressValue((numItems + 1) / receivedData.subtasks.length);
-  }, [receivedData.subtasks]);
+  // useEffect(() => {
+  //   const numItems = receivedData.subtasks.filter(
+  //     (item) => item.done === true
+  //   ).length;
+  //   setProgressValue((numItems + 1) / receivedData.subtasks.length);
+  // }, [receivedData.subtasks]);
 
   return (
     <View
@@ -142,6 +142,8 @@ const SelectedTaskScreen = () => {
                 item={subtask}
                 setVisible={setVisible}
                 visible={visible}
+                receivedData={receivedData}
+                setProgressValue={setProgressValue}
               />
             </View>
           ))}

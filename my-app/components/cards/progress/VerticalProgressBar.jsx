@@ -8,18 +8,34 @@ import Animated, {
 } from "react-native-reanimated";
 import { SIZES, FONT, COLORS } from "../../../constants";
 
-const VerticalProgressBar = ({ item, setVisible, visible }) => {
+const VerticalProgressBar = ({
+  item,
+  setVisible,
+  visible,
+  receivedData,
+  setProgressValue,
+}) => {
   const containerColor = useSharedValue(
     item.done ? COLORS.mintGreen : "lightgray"
   );
   const [iconColor, setIconColor] = useState(item.done ? "green" : "gray");
-
   // useEffect(() => {
-  //   if (item.done) {
-  //     containerColor.value = COLORS.mintGreen;
-  //     setIconColor("green");
-  //   }
-  // }, [item.done]);
+  //   const numItems = receivedData.subtasks.filter(
+  //     (item) => item.done === true
+  //   ).length;
+  //   setProgressValue((numItems + 1) / receivedData.subtasks.length);
+  // }, [receivedData.subtasks]);
+
+  useEffect(() => {
+    if (item.done) {
+      containerColor.value = COLORS.mintGreen;
+      setIconColor("green");
+    }
+    const numItems = receivedData.subtasks.filter(
+      (item) => item.done === true
+    ).length;
+    setProgressValue(numItems / receivedData.subtasks.length);
+  }, [item.done]);
   const handleClick = () => {
     if (!item.done) {
       containerColor.value = COLORS.mintGreen; // Change the color when container is clicked

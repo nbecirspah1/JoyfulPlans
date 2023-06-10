@@ -7,6 +7,7 @@ import Animated, {
   withTiming,
   useDerivedValue,
   interpolateColor,
+  runOnJS,
 } from "react-native-reanimated";
 import { ReText } from "react-native-redash";
 
@@ -19,7 +20,7 @@ const DonutChart = ({ progress }) => {
   const HALF_CIRCLE = R + STROKE_WIDTH;
   const DIAMETER = HALF_CIRCLE * 2;
 
-  const progressValue = useSharedValue(0.2);
+  const progressValue = useSharedValue(0);
   useEffect(() => {
     if (!progress) {
       progressValue.value = withTiming(0, { duration: 2000 });
