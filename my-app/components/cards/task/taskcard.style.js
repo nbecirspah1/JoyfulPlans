@@ -3,17 +3,17 @@ import { StyleSheet } from "react-native";
 import { COLORS, SHADOWS, SIZES } from "../../../constants";
 
 const styles = StyleSheet.create({
-  container: {
+  container: (item) => ({
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
     padding: SIZES.medium,
     borderRadius: SIZES.small,
-    backgroundColor: "#FFF",
+    backgroundColor: item.task_type === "kuća" ? "#FBEA73" : item.task_type === "higijena" ? "#D4ADF8" : COLORS.lightWhite,
     ...SHADOWS.medium,
     shadowColor: COLORS.white,
-  },
+  }),
   logoContainer: {
     width: 50,
     height: 50,

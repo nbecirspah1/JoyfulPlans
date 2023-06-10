@@ -16,11 +16,12 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks }) => {
   // console.log(data);
   const data = [
     {
-      task_id: 10,
+      task_id: 1,
       task_name: "Complete project report",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "04/06/2023",
+      date: "07/06/2023",
+      task_type: "kuća",
       subtasks: [
         {
           task_id: 1,
@@ -55,11 +56,12 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks }) => {
       ],
     },
     {
-      task_id: 20,
+      task_id: 2,
       task_name: "Prepare for meeting",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "04/06/2023",
+      date: "07/06/2023",
+      task_type: "higijena",
       subtasks: [
         {
           task_id: 1,
@@ -76,11 +78,12 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks }) => {
       ],
     },
     {
-      task_id: 30,
+      task_id: 3,
       task_name: "Follow up with clients",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "06/06/2023",
+      date: "09/06/2023",
+      task_type: "škola",
       subtasks: [
         {
           task_id: 1,
@@ -97,11 +100,12 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks }) => {
       ],
     },
     {
-      task_id: 40,
+      task_id: 4,
       task_name: "Organize files",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
       date: "15/06/2023",
+      task_type: "škola",
       subtasks: [
         {
           task_id: 1,
@@ -118,6 +122,7 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks }) => {
       ],
     },
   ];
+  console.log("TAAASKS ", data[0].subtasks);
   const isLoading = false;
   const error = false;
   const [selectedTask, setSelectedTask] = useState();

@@ -7,8 +7,8 @@ import Tasks from "./home/tasks/Tasks"
 import VerticalProgressBar from "./cards/progress/VerticalProgressBar";
 import CustomDrawer from "./drawer/CustomDrawer";
 import UserView from "./drawer/UserView";
-
-
+import ModalPopup from "./Modal/Modal"
+import DonutChart from "./DonutChart/DonutChart"
 
 
 
@@ -21,6 +21,8 @@ export {
   TaskCard,
   VerticalProgressBar,
   CustomDrawer,
-  UserView
+  UserView,
+  ModalPopup,
+  DonutChart
 
 };

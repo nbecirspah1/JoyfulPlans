@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
   container: (selectedTask, item) => ({
     width: 250,
     padding: SIZES.xLarge,
-    backgroundColor: selectedTask === item.task_id ? COLORS.paleGreen : "#FFF",
+    // backgroundColor: selectedTask === item.task_id  ? COLORS.paleGreen : "#FFF",
+    backgroundColor: item.task_type === "kuća" ? "#FBEA73" : item.task_type === "higijena" ? "#D4ADF8" : COLORS.lightWhite,
     borderRadius: SIZES.medium,
     justifyContent: "space-between",
     ...SHADOWS.medium,
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
   companyName: {
     fontSize: SIZES.medium,
     fontFamily: FONT.regular,
-    color: "#B3AEC6",
+    color: COLORS.primary,
     marginTop: SIZES.small / 1.5,
   },
   infoContainer: {

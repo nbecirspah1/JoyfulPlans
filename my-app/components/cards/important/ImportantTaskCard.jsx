@@ -1,15 +1,57 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
-
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import styles from "./importantaskcard.style";
 import { checkImageURL } from "../../../utils";
+import { COLORS } from "../../../constants";
 
 const ImportantTaskCard = ({ item, selectedTask, handleCardPress }) => {
+  const [iconName, setIconName] = useState("");
+
+  useEffect(() => {
+    if (item.task_type === "škola") {
+      setIconName("graduation-cap");
+    } else if (item.task_type === "higijena") {
+      setIconName("shower");
+    } else if (item.task_type === "kuća") {
+      setIconName("home");
+    }
+  }, []);
   return (
     <TouchableOpacity
       style={styles.container(selectedTask, item)}
       onPress={() => handleCardPress(item)}
     >
+      {iconName === "graduation-cap" && (
+        <FontAwesome
+          name={iconName}
+          size={40}
+          color={COLORS.primary}
+          style={{
+            marginRight: 16,
+          }}
+        />
+      )}
+      {iconName === "home" && (
+        <FontAwesome
+          name={iconName}
+          size={40}
+          color={COLORS.primary}
+          style={{
+            marginRight: 16,
+          }}
+        />
+      )}
+      {iconName === "shower" && (
+        <FontAwesome
+          name={iconName}
+          size={40}
+          color={COLORS.primary}
+          style={{
+            marginRight: 16,
+          }}
+        />
+      )}
       <TouchableOpacity
         style={styles.logoContainer(selectedTask, item)}
         onPress={() => handleCardPress(item)}

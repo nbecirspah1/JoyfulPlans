@@ -31,7 +31,8 @@ const ImportantTasks = ({
       task_name: "Complete project report",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "04/06/2023",
+      date: "07/06/2023",
+      task_type: "kuća",
       subtasks: [
         {
           task_id: 1,
@@ -70,7 +71,8 @@ const ImportantTasks = ({
       task_name: "Prepare for meeting",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "04/06/2023",
+      date: "07/06/2023",
+      task_type: "higijena",
       subtasks: [
         {
           task_id: 1,
@@ -91,7 +93,8 @@ const ImportantTasks = ({
       task_name: "Follow up with clients",
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "06/06/2023",
+      date: "09/06/2023",
+      task_type: "škola",
       subtasks: [
         {
           task_id: 1,
@@ -113,6 +116,7 @@ const ImportantTasks = ({
       employer_logo: require("../../../assets/images/pranjeSudja.png"),
       description: "Potrebno je zavrsiti project report tako da bla bla nbla",
       date: "15/06/2023",
+      task_type: "škola",
       subtasks: [
         {
           task_id: 1,

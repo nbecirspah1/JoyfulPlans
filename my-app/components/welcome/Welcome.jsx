@@ -29,10 +29,10 @@ const Welcome = ({
       setIconName("sunrise");
     } else if (currentTime < 18) {
       setGreeting("Dobar dan!");
-      setIconName("sun");
+      setIconName("sun-o");
     } else {
       setGreeting("Dobro veče!");
-      setIconName("moon");
+      setIconName("moon-o");
     }
   }, []);
   const currentDate = new Date();
@@ -66,7 +66,7 @@ const Welcome = ({
               }}
             />
           )}
-          {iconName === "sun" && (
+          {iconName === "sun-o" && (
             <FontAwesome
               name={iconName}
               size={40}
@@ -76,7 +76,7 @@ const Welcome = ({
               }}
             />
           )}
-          {iconName === "moon" && (
+          {iconName === "moon-o" && (
             <FontAwesome
               name={iconName}
               size={40}
