@@ -1,6 +1,17 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import LottieView from "lottie-react-native";
+import animationData from "../../assets/animations/animation14.json";
+import { AnimatedTyping } from "../../components";
+import { Feather, FontAwesome } from "@expo/vector-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faChalkboardTeacher,
+  faChild,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+
 import {
   StyleSheet,
   Text,
@@ -12,6 +23,7 @@ import {
   ScrollView,
   ImageBackground,
   KeyboardAvoidingView,
+  Keyboard,
 } from "react-native";
 import styles from "./loginregister.style";
 import Svg, { Image, Ellipse, ClipPath } from "react-native-svg";
@@ -29,15 +41,18 @@ import { COLORS, SIZES, images } from "../../constants";
 // import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginRegister({ navigation }) {
+  library.add(faChalkboardTeacher);
+  library.add(faChild);
+  let [greetingCompleted, setGreetingCompleted] = useState(false);
   const { height, width } = Dimensions.get("window");
   const imagePosition = useSharedValue(1);
   const formButtonScale = useSharedValue(1);
-  const [isRegistering, setIsRegistering] = useState(false);
+  const [isParent, setIsParent] = useState(false);
   const imageAnimatedStyle = useAnimatedStyle(() => {
     const interpolation = interpolate(
       imagePosition.value,
       [0, 1],
-      [-height / 2, 0]
+      [-height / 3.5, 0]
     );
     return {
       transform: [
@@ -84,8 +99,8 @@ export default function LoginRegister({ navigation }) {
   const loginHandler = () => {
     // runOnUI(() => {
     imagePosition.value = 0;
-    if (isRegistering) {
-      setIsRegistering(false);
+    if (isParent) {
+      setIsParent(false);
     }
     // })();
   };
@@ -93,33 +108,49 @@ export default function LoginRegister({ navigation }) {
   const registerHandler = () => {
     // runOnUI(() => {
     imagePosition.value = 0;
-    if (!isRegistering) {
-      setIsRegistering(true);
+    if (!isParent) {
+      setIsParent(true);
     }
     // })();
+  };
+
+  const [value, setValue] = useState("");
+
+  const handleChangeText = (text) => {
+    // Remove any non-numeric characters from the input
+    const numericValue = text.replace(/[^0-9]/g, "");
+    setValue(numericValue);
   };
 
   return (
     <View style={styles.container}>
       <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
-        <Svg height={height} width={width}>
-          <ClipPath id="clipPathId">
-            <Ellipse cx={width / 2} rx={height} ry={height} />
-          </ClipPath>
-          <Image
-            href={images.logo3}
-            width={width}
-            height={height}
-            preserveAspectRatio="xMaxYMid slice"
-            clipPath="url(#clipPathId)"
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            // marginBottom: 80,
+          }}
+        >
+          <AnimatedTyping
+            text={["Joyful Plans"]}
+            onComplete={() => setGreetingCompleted(true)}
           />
-        </Svg>
+          <LottieView
+            source={animationData}
+            autoPlay
+            loop
+            // style={{ width: 200, height: 200 }} // Adjust the width and height as needed
+          />
+        </View>
       </Animated.View>
       <Animated.View
         style={[styles.closeButtonContainer, closeButtonContainerStyle]}
       >
         <Text
           onPress={() => {
+            Keyboard.dismiss();
             imagePosition.value = 1;
           }}
           style={{ color: "#FFFFFF" }}
@@ -129,50 +160,79 @@ export default function LoginRegister({ navigation }) {
       </Animated.View>
       <View style={styles.bottomContainer}>
         <Animated.View style={buttonsAnimatedStyle}>
+          <Text
+            style={{
+              color: COLORS.primary,
+              fontWeight: 400,
+              fontSize: 15,
+              marginLeft: 30,
+              // alignSelf: "stretch",
+            }}
+          >
+            Prijavite se kao:
+          </Text>
           <Pressable style={styles.button} onPress={loginHandler}>
-            <Text style={styles.buttonText}>LOG IN</Text>
+            <View style={styles.buttonContainer}>
+              {/* <FontAwesome name="child" size={20} color="white" /> */}
+              <FontAwesomeIcon icon={faChild} size={20} color="white" />
+              <Text style={styles.buttonText}>DIJETE</Text>
+            </View>
           </Pressable>
         </Animated.View>
 
         <Animated.View style={buttonsAnimatedStyle}>
           <Pressable style={styles.button} onPress={registerHandler}>
-            <Text style={styles.buttonText}>REGISTER</Text>
+            <View style={styles.buttonContainer}>
+              <FontAwesomeIcon
+                icon={faChalkboardTeacher}
+                size={20}
+                color="white"
+              />
+              <Text style={styles.buttonText}>RODITELJ</Text>
+            </View>
           </Pressable>
         </Animated.View>
         <Animated.View style={[styles.formInputContainer, FormAnimatedStyle]}>
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor="black"
-            style={styles.textInput}
-          />
-          {isRegistering && (
+          {isParent && (
+            <React.Fragment>
+              <TextInput
+                placeholder="Unesite Email"
+                placeholderTextColor="black"
+                style={styles.textInput}
+              />
+              <TextInput
+                secureTextEntry={true}
+                placeholder="Unesite šifru"
+                placeholderTextColor="black"
+                style={styles.textInput}
+              />
+            </React.Fragment>
+          )}
+          {!isParent && (
             <TextInput
-              placeholder="Full Name"
+              secureTextEntry={true}
+              value={value}
+              onChangeText={handleChangeText}
+              keyboardType="numeric"
+              placeholder="XXXX"
               placeholderTextColor="black"
-              style={styles.textInput}
+              style={styles.codeInput}
+              maxLength={4}
             />
           )}
-
-          <TextInput
-            placeholder="Password"
-            placeholderTextColor="black"
-            style={styles.textInput}
-          />
           <Animated.View style={[styles.formButton, FormButtonAnimatedStyle]}>
             <Pressable
               onPress={() => {
                 {
                   formButtonScale.value = withSequence(
-                    withSpring(1.5),
+                    withSpring(1.1),
                     withSpring(1)
                   );
                   navigation.navigate("Home");
                 }
               }}
             >
-              <Text style={styles.buttonText}>
-                {isRegistering ? "REGISTER" : "LOG IN"}
-              </Text>
+              <Text style={styles.buttonText}>PRIJAVI SE</Text>
             </Pressable>
           </Animated.View>
         </Animated.View>

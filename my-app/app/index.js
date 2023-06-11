@@ -129,8 +129,8 @@ function MyDrawer1() {
 
 export default function App() {
   return(
-    <NavigationContainer independent={true} >
-      <Stack.Navigator >
+    <NavigationContainer independent={true}  >
+      <Stack.Navigator     >
         <Stack.Screen 
           name="LoginRegister"
           component = {LoginRegister}

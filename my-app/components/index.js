@@ -9,7 +9,7 @@ import CustomDrawer from "./drawer/CustomDrawer";
 import UserView from "./drawer/UserView";
 import ModalPopup from "./Modal/Modal"
 import DonutChart from "./DonutChart/DonutChart"
-
+import AnimatedTyping from "./animated/AnimatedTyping"
 
 
 export {
@@ -23,6 +23,7 @@ export {
   CustomDrawer,
   UserView,
   ModalPopup,
-  DonutChart
+  DonutChart,
+  AnimatedTyping
 
 };
