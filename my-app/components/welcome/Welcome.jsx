@@ -16,6 +16,7 @@ const Welcome = ({
   setActiveTaskType2,
   numberOfImportantTasks,
   numberOfTasks,
+  userInfo,
 }) => {
   const [activeTaskType, setActiveTaskType] = useState("Sve");
   const [greeting, setGreeting] = useState("");
@@ -25,13 +26,13 @@ const Welcome = ({
     const currentTime = new Date().getHours();
 
     if (currentTime < 12) {
-      setGreeting("Dobro jutro!");
+      setGreeting("Dobro jutro " + userInfo.user.name + "!");
       setIconName("sunrise");
     } else if (currentTime < 18) {
-      setGreeting("Dobar dan!");
+      setGreeting("Dobar dan " + userInfo.user.name + "!");
       setIconName("sun-o");
     } else {
-      setGreeting("Dobro veče!");
+      setGreeting("Dobro veče " + userInfo.user.name + "!");
       setIconName("moon-o");
     }
   }, []);

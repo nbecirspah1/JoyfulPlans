@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -15,9 +15,11 @@ import {
   DrawerItem,
 } from "@react-navigation/drawer";
 import { UserView } from "..";
+import { AuthContext } from "../../context/AuthContext";
 // import { BlurView } from "@react-native-community/blur";
 
 const CustomDrawer = (props) => {
+  const { userInfo, isLoading, logout } = useContext(AuthContext);
   return (
     // <View>
     // {/* <BlurView
@@ -38,6 +40,7 @@ const CustomDrawer = (props) => {
         )}
         activeTintColor={COLORS.primary}
         inactiveTintColor={COLORS.primary}
+        onPress={logout}
       />
     </View>
     // </View>

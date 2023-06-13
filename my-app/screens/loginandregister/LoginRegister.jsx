@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import LottieView from "lottie-react-native";
 import animationData from "../../assets/animations/animation14.json";
@@ -39,18 +39,23 @@ import Animated, {
 } from "react-native-reanimated";
 import { COLORS, SIZES, images } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
-
-// import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthContext } from "../../context/AuthContext";
+import Spinner from "react-native-loading-spinner-overlay";
+import { isParent, setIsParent } from "./isParent";
 
 export default function LoginRegister() {
   const navigation = useNavigation();
   library.add(faChalkboardTeacher);
   library.add(faChild);
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [childCode, setChildCode] = useState(null);
+  const { isLoading, login, userInfo } = useContext(AuthContext);
   let [greetingCompleted, setGreetingCompleted] = useState(false);
   const { height, width } = Dimensions.get("window");
   const imagePosition = useSharedValue(1);
   const formButtonScale = useSharedValue(1);
-  const [isParent, setIsParent] = useState(false);
+  // const [isParent, setIsParent] = useState(false);
   const imageAnimatedStyle = useAnimatedStyle(() => {
     const interpolation = interpolate(
       imagePosition.value,
@@ -102,7 +107,7 @@ export default function LoginRegister() {
   const loginHandler = () => {
     // runOnUI(() => {
     imagePosition.value = 0;
-    if (isParent) {
+    if (isParent.value) {
       setIsParent(false);
     }
     // })();
@@ -111,22 +116,21 @@ export default function LoginRegister() {
   const registerHandler = () => {
     // runOnUI(() => {
     imagePosition.value = 0;
-    if (!isParent) {
+    if (!isParent.value) {
       setIsParent(true);
     }
     // })();
   };
 
-  const [value, setValue] = useState("");
-
   const handleChangeText = (text) => {
     // Remove any non-numeric characters from the input
     const numericValue = text.replace(/[^0-9]/g, "");
-    setValue(numericValue);
+    setChildCode(numericValue);
   };
 
   return (
     <View style={styles.container}>
+      <Spinner visible={isLoading} />
       <Animated.View style={[StyleSheet.absoluteFill, imageAnimatedStyle]}>
         <View
           style={{
@@ -196,25 +200,33 @@ export default function LoginRegister() {
           </Pressable>
         </Animated.View>
         <Animated.View style={[styles.formInputContainer, FormAnimatedStyle]}>
-          {isParent && (
+          {isParent.value && (
             <React.Fragment>
               <TextInput
                 placeholder="Unesite Email"
                 placeholderTextColor="black"
                 style={styles.textInput}
+                value={email}
+                onChangeText={(text) => {
+                  setEmail(text);
+                }}
               />
               <TextInput
                 secureTextEntry={true}
                 placeholder="Unesite šifru"
                 placeholderTextColor="black"
                 style={styles.textInput}
+                value={password}
+                onChangeText={(text) => {
+                  setPassword(text);
+                }}
               />
             </React.Fragment>
           )}
-          {!isParent && (
+          {!isParent.value && (
             <TextInput
               secureTextEntry={true}
-              value={value}
+              value={childCode}
               onChangeText={handleChangeText}
               keyboardType="numeric"
               placeholder="XXXX"
@@ -223,7 +235,7 @@ export default function LoginRegister() {
               maxLength={4}
             />
           )}
-          {isParent && (
+          {isParent.value && (
             <Animated.View style={[styles.formButton, FormButtonAnimatedStyle]}>
               <Pressable
                 onPress={() => {
@@ -231,11 +243,13 @@ export default function LoginRegister() {
                     withSpring(1.1),
                     withSpring(1)
                   );
-
-                  navigation.navigate("MyDrawer", {
-                    screen: "HomeChild",
-                    params: { data: { isParent: true } },
-                  });
+                  login(email, password);
+                  // if (userInfo.token) {
+                  //   navigation.navigate("MyDrawer", {
+                  //     screen: "HomeChild",
+                  //     params: { data: { isParent: true } },
+                  //   });
+                  // }
                 }}
               >
                 <Text style={styles.buttonText}>PRIJAVI SE</Text>
@@ -243,7 +257,7 @@ export default function LoginRegister() {
             </Animated.View>
           )}
 
-          {!isParent && (
+          {!isParent.value && (
             <Animated.View style={[styles.formButton, FormButtonAnimatedStyle]}>
               <Pressable
                 onPress={() => {
@@ -252,10 +266,10 @@ export default function LoginRegister() {
                     withSpring(1)
                   );
 
-                  navigation.navigate("MyDrawer", {
-                    screen: "HomeChild",
-                    params: { data: { isParent: false } },
-                  });
+                  // navigation.navigate("MyDrawer", {
+                  //   screen: "HomeChild",
+                  //   params: { data: { isParent: false } },
+                  // });
                 }}
               >
                 <Text style={styles.buttonText}>PRIJAVI SE</Text>
@@ -267,3 +281,46 @@ export default function LoginRegister() {
     </View>
   );
 }
+
+// import { useEffect, useState } from "react";
+// import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+
+// export default function App() {
+//   let [isLoading, setIsLoading] = useState(true);
+//   let [error, setError] = useState();
+//   let [response, setResponse] = useState();
+
+//   useEffect(() => {
+//     fetch("http://192.168.1.7:3000/users/")
+//       .then((res) => res.json())
+//       .then((result) => {
+//         setIsLoading(false);
+//         setResponse(result);
+//         (error) => {
+//           setIsLoading(false);
+//           setError(error);
+//         };
+//       });
+//   }, []);
+
+//   const getContent = () => {
+//     if (isLoading) {
+//       return <ActivityIndicator size="large" />;
+//     }
+//     if (error) {
+//       return <Text>{error}</Text>;
+//     }
+//     console.log(response);
+//     return <Text>Ime prvog: {response[0].name}</Text>;
+//   };
+//   return <View style={styles.container}>{getContent()}</View>;
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#fff",
+//     alighItems: "center",
+//     justifyContent: "center",
+//   },
+// });
