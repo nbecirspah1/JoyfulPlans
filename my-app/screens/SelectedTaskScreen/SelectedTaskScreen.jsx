@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import LottieView from "lottie-react-native";
+import animationData from "../../assets/animations/confetti.json";
 import {
   View,
   ScrollView,
@@ -21,13 +23,17 @@ import Animated, {
 } from "react-native-reanimated";
 import { VerticalProgressBar, ModalPopup, DonutChart } from "../../components";
 // import { styles } from "./selectedtaskcreen.style";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import { FONT, SIZES, COLORS, images } from "../../constants";
 import { FontAwesome } from "@expo/vector-icons";
+import ShowSelectedTaskContext from "../../app/showSelectedTaskContext";
 
 const SelectedTaskScreen = () => {
   const route = useRoute();
   const receivedData = route.params?.data;
+  const isParent = route.params?.isParent;
+  const navigation = useNavigation();
+
   // const numItems = receivedData.subtasks.length(); // Number of progressBarItems
   const [visible, setVisible] = React.useState(false);
   const spin = useSharedValue(0);
@@ -87,8 +93,32 @@ const SelectedTaskScreen = () => {
             backgroundColor: COLORS.lavander,
           }}
         >
-          <ModalPopup visible={visible}>
+          <ModalPopup
+            visible={visible}
+            progressValue={progressValue}
+            receivedData={receivedData}
+          >
+            {/* {progressValue * receivedData.subtasks.length ===
+              receivedData.subtasks.length && (
+              // <View style={styles.container}>
+              //   <View style={styles.lottieContainer}>
+              <LottieView source={animationData} autoPlay loop />
+              //   </View>
+              // </View>
+            )} */}
             <View style={{ alignItems: "center" }}>
+              {progressValue * receivedData.subtasks.length ===
+                receivedData.subtasks.length && (
+                // <View style={styles.container}>
+                //   <View style={styles.lottieContainer}>
+                <React.Fragment>
+                  <LottieView source={animationData} autoPlay loop />
+                  <LottieView source={animationData} autoPlay loop />
+                  <LottieView source={animationData} autoPlay loop />
+                </React.Fragment>
+                //   </View>
+                // </View>
+              )}
               <View style={styles.header}>
                 <TouchableOpacity
                   onPress={() => {
@@ -105,17 +135,32 @@ const SelectedTaskScreen = () => {
                 progress={progressValue}
                 previousProgressValue={previousProgressValue}
               />
-              <Text
-                style={{
-                  marginVertical: 30,
-                  fontSize: 20,
-                  textAlign: "center",
-                }}
-              >
-                Čestitamo, uradili ste{" "}
-                {progressValue * receivedData.subtasks.length} od{" "}
-                {receivedData.subtasks.length} {zadatakPadezi}!
-              </Text>
+              {progressValue * receivedData.subtasks.length !=
+                receivedData.subtasks.length && (
+                <Text
+                  style={{
+                    marginVertical: 30,
+                    fontSize: 20,
+                    textAlign: "center",
+                  }}
+                >
+                  Čestitamo, uradili ste{" "}
+                  {progressValue * receivedData.subtasks.length} od{" "}
+                  {receivedData.subtasks.length} {zadatakPadezi}!
+                </Text>
+              )}
+              {progressValue * receivedData.subtasks.length ===
+                receivedData.subtasks.length && (
+                <Text
+                  style={{
+                    marginVertical: 30,
+                    fontSize: 20,
+                    textAlign: "center",
+                  }}
+                >
+                  Čestitamo, uradili ste sve zadatke!
+                </Text>
+              )}
             </View>
           </ModalPopup>
           <Text
@@ -207,6 +252,7 @@ const SelectedTaskScreen = () => {
                       receivedData={receivedData}
                       setProgressValue={setProgressValue}
                       setPreviousProgressValue={setPreviousProgressValue}
+                      isParent={isParent}
                     />
                   </View>
                 ))}
@@ -259,5 +305,14 @@ const styles = StyleSheet.create({
     height: 20,
     alignItems: "flex-end",
     justifyContent: "center",
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  lottieContainer: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

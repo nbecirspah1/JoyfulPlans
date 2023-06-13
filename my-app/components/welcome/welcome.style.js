@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { COLORS, FONT, SIZES } from "../../constants";
+import { COLORS, FONT,SIZES } from "../../constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -19,12 +19,12 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   userName: {
-    fontFamily: FONT.regular,
+    // fontFamily: FONT.regular,
     fontSize: SIZES.h1,
     color: COLORS.secondary,
   },
   welcomeMessage: {
-    fontFamily: FONT.bold,
+    // fontFamily: FONT.bold,
     fontSize: SIZES.h2,
     color: COLORS.primary,
     marginTop: 2,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   searchInput: {
-    fontFamily: FONT.regular,
+    // fontFamily: FONT.regular,
     width: "100%",
     height: "100%",
     paddingHorizontal: SIZES.medium,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
 
   }),
   tabText: (activeJobType, item) => ({
-    fontFamily: FONT.medium,
+    // fontFamily: FONT.medium,
     color: activeJobType === item ? COLORS.primary : COLORS.gray,
   }),
 

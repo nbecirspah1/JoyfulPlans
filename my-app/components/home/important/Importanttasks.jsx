@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -10,12 +10,14 @@ import {
 import styles from "./importanttasks.style";
 import { COLORS, SIZES } from "../../../constants";
 import { useNavigation } from "@react-navigation/native";
-import { ImportantTaskCard } from "../../";
+import ShowSelectedTaskContext from "../../../app/showSelectedTaskContext";
+import { ImportantTaskCard, AddCard } from "../../";
 // import useFetch from "../../../hook/useFetch";
 const ImportantTasks = ({
   navigation,
   activeTaskType2,
   setNumberOfImportantTasks,
+  isParent,
 }) => {
   // const router = useRouter();
   // const isLoading = false;
@@ -175,6 +177,7 @@ const ImportantTasks = ({
   useEffect(() => {
     setNumberOfImportantTasks(filteredData.length);
   }, [filteredData]);
+  const { setShowSelectedTask } = useContext(ShowSelectedTaskContext);
 
   const [selectedTask, setSelectedTask] = useState();
   const handleCardPress = (item) => {
@@ -182,47 +185,72 @@ const ImportantTasks = ({
     setSelectedTask(item.task_id);
     // formButtonScale.value = withSequence(withSpring(1.5), withSpring(1));
     // navigation.navigate("SelectedTask", { data: item });
-    navigation.navigate("NestedDrawer", {
+    // const parentNavigator = navigation.dangerouslyGetParent();
+    // parentNavigator.navigate("HomeChild", {
+    //   screen: "HomeChild",
+    //   params: { data },
+    // });
+    // navigation.setParams({ childData: dataToSend });
+
+    setShowSelectedTask(true);
+    navigation.navigate("MyDrawer", {
       screen: "SelectedTask",
-      params: { data: item },
+      params: { data: item, isParent: isParent },
     });
   };
+  const handleAddPress = () => {
+    navigation.navigate("Settings");
+  };
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Važni zadaci</Text>
-        <TouchableOpacity>
-          <Text style={styles.headerBtn}>{activeTaskType2}</Text>
-        </TouchableOpacity>
-      </View>
+    <ShowSelectedTaskContext.Provider>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Važni zadaci</Text>
+          <TouchableOpacity>
+            <Text style={styles.headerBtn}>{activeTaskType2}</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.cardsContainer}>
-        {isLoading ? (
-          <ActivityIndicator size="large" colors={COLORS.primary} />
-        ) : error ? (
-          <Text>Nešto nije uredu</Text>
-        ) : filteredData.length === 0 ? (
-          <Text>Nema novih zadataka</Text>
-        ) : (
-          <FlatList
-            data={filteredData}
-            renderItem={({ item }) => (
-              <ImportantTaskCard
-                item={item}
-                selectedTask={selectedTask}
-                handleCardPress={handleCardPress}
-              />
-              // <View>
-              //   <Text>{item.task_name}</Text>
-              // </View>
-            )}
-            keyExtractor={(item) => item?.task_id}
-            contentContainerStyle={{ columnGap: SIZES.medium }}
-            horizontal
-          />
-        )}
+        <View style={styles.cardsContainer}>
+          {isLoading ? (
+            <ActivityIndicator size="large" colors={COLORS.primary} />
+          ) : error ? (
+            <Text>Nešto nije uredu</Text>
+          ) : filteredData.length === 0 ? (
+            <Text>Nema novih zadataka</Text>
+          ) : (
+            <FlatList
+              data={filteredData}
+              renderItem={({ item, index }) => {
+                if (index === filteredData.length - 1 && isParent) {
+                  return (
+                    <>
+                      <ImportantTaskCard
+                        item={item}
+                        selectedTask={selectedTask}
+                        handleCardPress={handleCardPress}
+                      />
+                      <AddCard handleAddPress={handleAddPress} />
+                    </>
+                  );
+                } else {
+                  return (
+                    <ImportantTaskCard
+                      item={item}
+                      selectedTask={selectedTask}
+                      handleCardPress={handleCardPress}
+                    />
+                  );
+                }
+              }}
+              keyExtractor={(item) => item?.task_id}
+              contentContainerStyle={{ columnGap: SIZES.medium }}
+              horizontal
+            />
+          )}
+        </View>
       </View>
-    </View>
+    </ShowSelectedTaskContext.Provider>
   );
 };
 

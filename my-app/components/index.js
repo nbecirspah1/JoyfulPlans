@@ -1,6 +1,8 @@
 import ScreenHeaderBtn from "./header/ScreenHeaderBtn";
 import Welcome from "./welcome/Welcome";
 import ImportantTaskCard from "./cards/important/ImportantTaskCard"
+import AddCard from "./cards/addCard/AddCard"
+import AddCommonCard from "./cards/addCommonCard/AddCommonCard"
 import ImportantTasks from "./home/important/Importanttasks"
 import TaskCard from "./cards/task/TaskCard"
 import Tasks from "./home/tasks/Tasks"
@@ -24,6 +26,7 @@ export {
   UserView,
   ModalPopup,
   DonutChart,
-  AnimatedTyping
-
+  AnimatedTyping,
+  AddCard,
+  AddCommonCard
 };

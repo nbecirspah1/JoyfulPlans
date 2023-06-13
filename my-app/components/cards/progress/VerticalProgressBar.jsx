@@ -14,6 +14,7 @@ const VerticalProgressBar = ({
   receivedData,
   setProgressValue,
   setPreviousProgressValue,
+  isParent,
 }) => {
   const containerColor = useSharedValue(
     item.done ? COLORS.mintGreen : "#ACAC9A"
@@ -36,7 +37,7 @@ const VerticalProgressBar = ({
     setPreviousProgressValue((numItems - 1) / receivedData.subtasks.length);
   }, [item.done]);
   const handleClick = () => {
-    if (!item.done) {
+    if (!item.done && !isParent) {
       containerColor.value = COLORS.mintGreen; // Change the color when container is clicked
       setIconColor(COLORS.icon);
       setFontWeight(500);

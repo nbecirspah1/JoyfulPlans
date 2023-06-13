@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import styles from "./tasks.style";
 import { COLORS, SIZES } from "../../../constants";
 // import useFetch from "../../../hook/useFetch";
-import { TaskCard } from "../../";
-const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks }) => {
+import { TaskCard, AddCommonCard } from "../../";
+const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks, isParent }) => {
   //   const router = useRouter();
   // const isLoading = false;
   // const error = false;
@@ -179,6 +179,9 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks }) => {
       params: { data: item },
     });
   };
+  const handleAddPress = () => {
+    navigation.navigate("Settings");
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -198,19 +201,30 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks }) => {
         ) : (
           <FlatList
             data={filteredData}
-            renderItem={({ item }) => (
-              <TaskCard
-                item={item}
-                task={selectedTask}
-                handleCardPress={handleCardPress}
-              />
-              // <View>
-              //   <Text>{item.task_name}</Text>
-              // </View>
-            )}
+            renderItem={({ item, index }) => {
+              if (index === filteredData.length - 1 && isParent) {
+                return (
+                  <>
+                    <TaskCard
+                      item={item}
+                      selectedTask={selectedTask}
+                      handleCardPress={handleCardPress}
+                    />
+                    <AddCommonCard handleAddPress={handleAddPress} />
+                  </>
+                );
+              } else {
+                return (
+                  <TaskCard
+                    item={item}
+                    selectedTask={selectedTask}
+                    handleCardPress={handleCardPress}
+                  />
+                );
+              }
+            }}
             keyExtractor={(item) => item?.task_id}
             contentContainerStyle={{ rowGap: SIZES.small }}
-            vertical
           />
         )}
       </View>

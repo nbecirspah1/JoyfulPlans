@@ -38,9 +38,12 @@ import Animated, {
   runOnUI,
 } from "react-native-reanimated";
 import { COLORS, SIZES, images } from "../../constants";
+import { useNavigation } from "@react-navigation/native";
+
 // import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function LoginRegister({ navigation }) {
+export default function LoginRegister() {
+  const navigation = useNavigation();
   library.add(faChalkboardTeacher);
   library.add(faChild);
   let [greetingCompleted, setGreetingCompleted] = useState(false);
@@ -220,21 +223,45 @@ export default function LoginRegister({ navigation }) {
               maxLength={4}
             />
           )}
-          <Animated.View style={[styles.formButton, FormButtonAnimatedStyle]}>
-            <Pressable
-              onPress={() => {
-                {
+          {isParent && (
+            <Animated.View style={[styles.formButton, FormButtonAnimatedStyle]}>
+              <Pressable
+                onPress={() => {
                   formButtonScale.value = withSequence(
                     withSpring(1.1),
                     withSpring(1)
                   );
-                  navigation.navigate("Home");
-                }
-              }}
-            >
-              <Text style={styles.buttonText}>PRIJAVI SE</Text>
-            </Pressable>
-          </Animated.View>
+
+                  navigation.navigate("MyDrawer", {
+                    screen: "HomeChild",
+                    params: { data: { isParent: true } },
+                  });
+                }}
+              >
+                <Text style={styles.buttonText}>PRIJAVI SE</Text>
+              </Pressable>
+            </Animated.View>
+          )}
+
+          {!isParent && (
+            <Animated.View style={[styles.formButton, FormButtonAnimatedStyle]}>
+              <Pressable
+                onPress={() => {
+                  formButtonScale.value = withSequence(
+                    withSpring(1.1),
+                    withSpring(1)
+                  );
+
+                  navigation.navigate("MyDrawer", {
+                    screen: "HomeChild",
+                    params: { data: { isParent: false } },
+                  });
+                }}
+              >
+                <Text style={styles.buttonText}>PRIJAVI SE</Text>
+              </Pressable>
+            </Animated.View>
+          )}
         </Animated.View>
       </View>
     </View>
