@@ -69,52 +69,40 @@ export const AuthProvider = ({ children }) => {
       });
   }
 
-//   const uploadProfileImage = () =>{
-//     const formData = new FormData();
-//     formData.append('profile', {
-//       name: new Date() + "_profile",
-//       uri: uploadProfileImage,
-//       type: 'image/jpg'
-//     })
-//     client.post(`${BASE_URL}/upload-profile`, formData, {
-//       headers: {
-//         Accept: 'application/json',
-//         'Content-Type': 'multipart/form-data',
-//         Authorization: `Bearer ${userInfo.token}`,
-//       }
-//     })
-//   }
+const uploadProfileImage = async (imageUri) => {
+  try {
+   
+    setIsLoading(true);
+    
+    const formData = new FormData();
+    formData.append('profile', {
+      name: new Date() + "_profile",
+      uri: imageUri,
+      type: 'image/jpeg', 
+    });
 
-  const uploadProfileImage = async (imageUri) => {
-    try {
-      const formData = new FormData();
-      formData.append('profile', {
-        name: new Date() + "_profile",
-        uri: imageUri,
-        type: 'image/jpg'
-      });
-  
-      const response = await axios.post(`${BASE_URL}/upload`, formData, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-        data: {
-          isParent: isParent
-        }
-      });
-  
-      console.log("Profile image uploaded successfully!", response.data);
-      // Perform any necessary actions after the image upload
-      // ...
-  
-    } catch (error) {
-      console.error("Error uploading profile image:", error);
-      // Handle upload error
-      // ...
-    }
-  };
+    const response = await axios.post(`${BASE_URL}/upload`, formData, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+      data: {
+        isParent: isParent,
+      },
+    });
+    setIsLoading(false)
+    console.log("Profile image uploaded successfully!", response.data);
+    // Perform any necessary actions after the image upload
+    // ...
+
+  } catch (error) {
+    console.error("Error uploading profile image:", error);
+    // Handle upload error
+    // ...
+  }
+};
+
 
   
   

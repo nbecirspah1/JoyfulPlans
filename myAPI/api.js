@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
+const tmp = require('tmp');
 
 const fs = require('fs')
 const { google } = require('googleapis')
@@ -20,7 +21,7 @@ client.connect();
 
 
 
-async function uploadFile(profileImage, userId){
+async function uploadFile(tempFilePath, userId){
     try{
         const auth = new google.auth.GoogleAuth({
             keyFile: './googlekey.json',
@@ -39,7 +40,7 @@ async function uploadFile(profileImage, userId){
 
         const media = {
             mimeType: 'image/jpg',
-            body: fs.createReadStream(profileImage)
+            body: fs.createReadStream(tempFilePath)
         }
 
         const response = await driveService.files.create({
@@ -52,7 +53,40 @@ async function uploadFile(profileImage, userId){
     }catch(err){
         console.log('Upload file error', err)
     }
-}
+}  
+// async function uploadFile(profileImage, userId){
+//     try{
+//         const auth = new google.auth.GoogleAuth({
+//             keyFile: './googlekey.json',
+//             scopes: ['https://www.googleapis.com/auth/drive']
+//         })
+
+//         const driveService = google.drive({
+//             version: 'v3',
+//             auth
+//         })
+
+//         const fileMetaData = {
+//             'name': userId+'.jpg',
+//             'parents': [GOOGLE_API_FOLDER_ID]
+//         }
+
+//         const media = {
+//             mimeType: 'image/jpg',
+//             body: fs.createReadStream(profileImage)
+//         }
+
+//         const response = await driveService.files.create({
+//             resource: fileMetaData,
+//             media: media,
+//             field: 'id'
+//         })
+//         return response.data.id
+
+//     }catch(err){
+//         console.log('Upload file error', err)
+//     }
+// }
 
 // uploadFile().then(data => {
 //     console.log(data)
@@ -156,7 +190,7 @@ app.post("/login", (req, res) => {
   app.post("/loginChild", (req, res) => {
     const { code } = req.body;
   
-    const loginQuery = `SELECT id, name, profile_image FROM children WHERE code = '${code}' `;
+    const loginQuery = `SELECT * FROM children WHERE code = '${code}' `;
   
     client.query(loginQuery, (err, result) => {
       if (!err) {
@@ -258,9 +292,8 @@ app.post("/login", (req, res) => {
     }
   
     const token = authorizationHeader.replace('Bearer ', '');
-    console.log(token)
-   
-   
+    console.log(token);
+  
     // Verify and decode the token
     jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
       if (err) {
@@ -268,33 +301,58 @@ app.post("/login", (req, res) => {
         res.status(401).send('Invalid token');
         return;
       }
-         //const userId = req.body.userId;
-    const profileImage = req.file.buffer; // Access the uploaded image buffer
-    const imageID = null
-          const userId = decoded.userId;
-          if(profileImage){
-            uploadFile(profileImage, userId).then(data => {
-                console.log(data)
-                imageID=data
-                // https://drive.google.com/uc?export=view&id=
-            })
-          }
-          
-      
-
-      
-      // Insert the profile image into the database
-      const insertQuery = 'UPDATE children SET profile_image = $1 WHERE id = $2';
   
-      client.query(insertQuery, [imageID, userId], (err, result) => {
-        if (err) {
-          console.error('Error uploading image:', err);
-          res.status(500).send('Error uploading image');
-        } else {
-          console.log('Image uploaded successfully');
-          res.send('Image uploaded successfully');
-        }
-      });
+      const profileImage = req.file.buffer; // Access the uploaded image buffer
+      console.log("ISPISIIIII MIIIIIII", profileImage);
+      const userId = decoded.userId;
+  
+      if (profileImage) {
+        // Create a temporary file
+        tmp.file({ postfix: '.jpg' }, (err, tempFilePath, fd, cleanupCallback) => {
+          if (err) {
+            console.error('Error creating temporary file:', err);
+            res.status(500).send('Error uploading image');
+            return;
+          }
+  
+          // Save the profileImage buffer to the temporary file
+          fs.writeFile(tempFilePath, profileImage, (err) => {
+            if (err) {
+              console.error('Error writing to temporary file:', err);
+              res.status(500).send('Error uploading image');
+              return;
+            }
+              let imageID = null;
+            
+            // Upload the temporary file
+            uploadFile(tempFilePath, userId)
+              .then((data) => {
+                  // Insert the profile image into the database
+                const insertQuery = 'UPDATE children SET profile_image = $1 WHERE id = $2';
+                client.query(insertQuery, [data, userId], (err, result) => {
+                if (err) {
+                    console.error('Error uploading image:', err);
+                    res.status(500).send('Error uploading image');
+                } else {
+                console.log('Image uploaded successfully');
+                res.send('Image uploaded successfully');
+            }
+        });
+                // https://drive.google.com/uc?export=view&id=
+              })
+              .catch((err) => {
+                console.error('Error uploading file:', err);
+              })
+              .finally(() => {
+                // Delete the temporary file
+                cleanupCallback();
+              });
+          });
+        });
+      }
+  
+   
     });
   });
+  
 

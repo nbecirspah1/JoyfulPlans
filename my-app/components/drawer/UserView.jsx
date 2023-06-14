@@ -14,9 +14,12 @@ const UserView = () => {
   useEffect(() => {
     requestMediaLibraryPermission();
     if (userInfo.user.profile_image) {
-      setSrc(userInfo.user.profile_image);
-    } else {
-      setSrc(images.profile);
+      const base64WithoutPrefix = userInfo.user.profile_image.substring(
+        userInfo.user.profile_image.indexOf(",") + 1
+      );
+      setSrc(
+        `https://drive.google.com/uc?export=view&id=${base64WithoutPrefix}`
+      );
     }
   }, []);
 
@@ -49,7 +52,7 @@ const UserView = () => {
       <TouchableOpacity onPress={uploadImage}>
         {!pic && (
           <Image
-            source={src}
+            source={src ? { uri: src } : images.profile}
             style={{
               width: 80,
               height: 80,
