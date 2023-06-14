@@ -68,9 +68,58 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(false);
       });
   }
+
+//   const uploadProfileImage = () =>{
+//     const formData = new FormData();
+//     formData.append('profile', {
+//       name: new Date() + "_profile",
+//       uri: uploadProfileImage,
+//       type: 'image/jpg'
+//     })
+//     client.post(`${BASE_URL}/upload-profile`, formData, {
+//       headers: {
+//         Accept: 'application/json',
+//         'Content-Type': 'multipart/form-data',
+//         Authorization: `Bearer ${userInfo.token}`,
+//       }
+//     })
+//   }
+
+  const uploadProfileImage = async (imageUri) => {
+    try {
+      const formData = new FormData();
+      formData.append('profile', {
+        name: new Date() + "_profile",
+        uri: imageUri,
+        type: 'image/jpg'
+      });
+  
+      const response = await axios.post(`${BASE_URL}/upload`, formData, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+        data: {
+          isParent: isParent
+        }
+      });
+  
+      console.log("Profile image uploaded successfully!", response.data);
+      // Perform any necessary actions after the image upload
+      // ...
+  
+    } catch (error) {
+      console.error("Error uploading profile image:", error);
+      // Handle upload error
+      // ...
+    }
+  };
+
+  
   
   return (
-    <AuthContext.Provider value={{ isLoading, userInfo, login, logout, loginChild }}>
+    <AuthContext.Provider value={{ isLoading, userInfo, login, logout, loginChild, uploadProfileImage }}>
       {children}
     </AuthContext.Provider>
   );

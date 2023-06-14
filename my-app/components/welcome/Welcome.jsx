@@ -26,13 +26,13 @@ const Welcome = ({
     const currentTime = new Date().getHours();
 
     if (currentTime < 12) {
-      setGreeting("Dobro jutro " + userInfo.user.name + "!");
+      setGreeting("Dobro jutro, " + userInfo.user.name + "!");
       setIconName("sunrise");
     } else if (currentTime < 18) {
-      setGreeting("Dobar dan " + userInfo.user.name + "!");
+      setGreeting("Dobar dan, " + userInfo.user.name + "!");
       setIconName("sun-o");
     } else {
-      setGreeting("Dobro veče " + userInfo.user.name + "!");
+      setGreeting("Dobro veče, " + userInfo.user.name + "!");
       setIconName("moon-o");
     }
   }, []);
@@ -89,7 +89,7 @@ const Welcome = ({
           )}
           <Text
             style={{
-              fontSize: 40,
+              fontSize: 30,
               fontWeight: "bold",
               color: COLORS.primary,
             }}

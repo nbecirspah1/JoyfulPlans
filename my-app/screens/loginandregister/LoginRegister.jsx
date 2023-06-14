@@ -41,7 +41,6 @@ import { COLORS, SIZES, images } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
-import { isParent, setIsParent } from "./IsParentContext";
 import { IsParentContext } from "./IsParentContext";
 export default function LoginRegister() {
   const navigation = useNavigation();
