@@ -11,7 +11,7 @@ import {
 import { COLORS, SIZES, images } from "../../constants";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
-import { isParent } from "../loginandregister/isParent";
+import { isParent } from "../loginandregister/IsParentContext";
 
 const { height } = Dimensions.get("window");
 

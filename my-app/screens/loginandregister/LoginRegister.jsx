@@ -41,8 +41,8 @@ import { COLORS, SIZES, images } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
-import { isParent, setIsParent } from "./isParent";
-
+import { isParent, setIsParent } from "./IsParentContext";
+import { IsParentContext } from "./IsParentContext";
 export default function LoginRegister() {
   const navigation = useNavigation();
   library.add(faChalkboardTeacher);
@@ -50,7 +50,8 @@ export default function LoginRegister() {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [childCode, setChildCode] = useState(null);
-  const { isLoading, login, userInfo } = useContext(AuthContext);
+  const { isLoading, login, userInfo, loginChild } = useContext(AuthContext);
+  const { isParent, setIsParent } = useContext(IsParentContext);
   let [greetingCompleted, setGreetingCompleted] = useState(false);
   const { height, width } = Dimensions.get("window");
   const imagePosition = useSharedValue(1);
@@ -107,18 +108,14 @@ export default function LoginRegister() {
   const loginHandler = () => {
     // runOnUI(() => {
     imagePosition.value = 0;
-    if (isParent.value) {
-      setIsParent(false);
-    }
+    setIsParent(false);
     // })();
   };
 
   const registerHandler = () => {
     // runOnUI(() => {
     imagePosition.value = 0;
-    if (!isParent.value) {
-      setIsParent(true);
-    }
+    setIsParent(true);
     // })();
   };
 
@@ -200,7 +197,7 @@ export default function LoginRegister() {
           </Pressable>
         </Animated.View>
         <Animated.View style={[styles.formInputContainer, FormAnimatedStyle]}>
-          {isParent.value && (
+          {isParent && (
             <React.Fragment>
               <TextInput
                 placeholder="Unesite Email"
@@ -223,7 +220,7 @@ export default function LoginRegister() {
               />
             </React.Fragment>
           )}
-          {!isParent.value && (
+          {!isParent && (
             <TextInput
               secureTextEntry={true}
               value={childCode}
@@ -235,7 +232,7 @@ export default function LoginRegister() {
               maxLength={4}
             />
           )}
-          {isParent.value && (
+          {isParent && (
             <Animated.View style={[styles.formButton, FormButtonAnimatedStyle]}>
               <Pressable
                 onPress={() => {
@@ -244,12 +241,6 @@ export default function LoginRegister() {
                     withSpring(1)
                   );
                   login(email, password);
-                  // if (userInfo.token) {
-                  //   navigation.navigate("MyDrawer", {
-                  //     screen: "HomeChild",
-                  //     params: { data: { isParent: true } },
-                  //   });
-                  // }
                 }}
               >
                 <Text style={styles.buttonText}>PRIJAVI SE</Text>
@@ -257,7 +248,7 @@ export default function LoginRegister() {
             </Animated.View>
           )}
 
-          {!isParent.value && (
+          {!isParent && (
             <Animated.View style={[styles.formButton, FormButtonAnimatedStyle]}>
               <Pressable
                 onPress={() => {
@@ -265,11 +256,7 @@ export default function LoginRegister() {
                     withSpring(1.1),
                     withSpring(1)
                   );
-
-                  // navigation.navigate("MyDrawer", {
-                  //   screen: "HomeChild",
-                  //   params: { data: { isParent: false } },
-                  // });
+                  loginChild(childCode);
                 }}
               >
                 <Text style={styles.buttonText}>PRIJAVI SE</Text>

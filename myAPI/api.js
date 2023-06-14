@@ -100,7 +100,47 @@ app.post("/login", (req, res) => {
       }
     });
   });
+
   
+  app.post("/loginChild", (req, res) => {
+    const { code } = req.body;
+  
+    const loginQuery = `SELECT * FROM children WHERE code = '${code}' `;
+  
+    client.query(loginQuery, (err, result) => {
+      if (!err) {
+        if (result.rows.length > 0) {
+          // Generisanje access tokena
+          const user = result.rows[0];
+          const token = jwt.sign(
+            { userId: user.id, email: user.email },
+            "tajna_za_potpisivanje",
+            { expiresIn: "1h" } // Token će isteći za 1 sat
+          );
+  
+          // Sačuvaj access token u bazi podataka za datog korisnika
+          const updateTokenQuery = `UPDATE children SET access_token = '${token}' WHERE id = ${user.id}`;
+  
+          client.query(updateTokenQuery, (err, result) => {
+            if (!err) {
+              // Remove the password field from the user object
+              delete user.password;
+              res.send({ user, token });
+            } else {
+              console.log(err.message);
+              res.status(500).send("Error saving access token");
+            }
+          });
+        } else {
+          res.status(401).send("Invalid email or password");
+        }
+      } else {
+        console.log(err.message);
+        res.status(500).send("Error logging in");
+      }
+    });
+  });
+
   app.post("/logout", (req, res) => {
     const authorizationHeader = req.headers.authorization;
     if (!authorizationHeader) {
@@ -109,6 +149,7 @@ app.post("/login", (req, res) => {
     }
   
     const token = authorizationHeader.replace("Bearer ", "");
+    const isParent = req.body.isParent; // Fetch the isParent value from the request body
   
     // Verify and decode the token
     jwt.verify(token, "tajna_za_potpisivanje", (err, decoded) => {
@@ -119,19 +160,33 @@ app.post("/login", (req, res) => {
       }
   
       const userId = decoded.userId;
-  
-      // Clear the access token for the user in the database
+      if(isParent){
+              // Clear the access token for the user in the database
       const clearTokenQuery = `UPDATE users SET access_token = NULL WHERE id = ${userId}`;
   
       client.query(clearTokenQuery, (err, result) => {
         if (!err) {
           res.send("Logout successful");
+          // Use the isParent value as needed in the server-side logic
         } else {
           console.log(err.message);
           res.status(500).send("Error logging out");
         }
       });
+      }else{
+        const clearTokenQuery = `UPDATE children SET access_token = NULL WHERE id = ${userId}`;
+  
+        client.query(clearTokenQuery, (err, result) => {
+          if (!err) {
+            res.send("Logout successful");
+            // Use the isParent value as needed in the server-side logic
+          } else {
+            console.log(err.message);
+            res.status(500).send("Error logging out");
+          }
+        });
+      }
+
     });
   });
-  
   
