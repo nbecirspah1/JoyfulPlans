@@ -213,7 +213,7 @@ app.post("/login", (req, res) => {
   
           // Sačuvaj access token u bazi podataka za datog korisnika
           const updateTokenQuery = `UPDATE children SET access_token = '${token}' WHERE id = ${user.id}`;
-  
+              console.log("TOKEEEN ", updateTokenQuery)
           client.query(updateTokenQuery, (err, result) => {
             if (!err) {
               // Remove the password field from the user object
@@ -284,7 +284,7 @@ app.post("/login", (req, res) => {
   });
   
 
-  app.post('/upload', upload.single('profile'), (req, res) => {
+  app.post('/uploadChild', upload.single('profile'), (req, res) => {
     const authorizationHeader = req.headers.authorization;
     if (!authorizationHeader) {
       res.status(401).send('Unauthorized');
@@ -292,7 +292,6 @@ app.post("/login", (req, res) => {
     }
   
     const token = authorizationHeader.replace('Bearer ', '');
-    console.log(token);
   
     // Verify and decode the token
     jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
@@ -303,9 +302,7 @@ app.post("/login", (req, res) => {
       }
   
       const profileImage = req.file.buffer; // Access the uploaded image buffer
-      console.log("ISPISIIIII MIIIIIII", profileImage);
       const userId = decoded.userId;
-  
       if (profileImage) {
         // Create a temporary file
         tmp.file({ postfix: '.jpg' }, (err, tempFilePath, fd, cleanupCallback) => {
@@ -328,7 +325,8 @@ app.post("/login", (req, res) => {
             uploadFile(tempFilePath, userId)
               .then((data) => {
                   // Insert the profile image into the database
-                const insertQuery = 'UPDATE children SET profile_image = $1 WHERE id = $2';
+                let insertQuery = 'UPDATE children SET profile_image = $1 WHERE id = $2';
+          
                 client.query(insertQuery, [data, userId], (err, result) => {
                 if (err) {
                     console.error('Error uploading image:', err);
@@ -356,3 +354,211 @@ app.post("/login", (req, res) => {
   });
   
 
+  app.post('/uploadChild', upload.single('profile'), (req, res) => {
+    const authorizationHeader = req.headers.authorization;
+    if (!authorizationHeader) {
+      res.status(401).send('Unauthorized');
+      return;
+    }
+  
+    const token = authorizationHeader.replace('Bearer ', '');
+  
+    // Verify and decode the token
+    jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
+      if (err) {
+        console.log(err.message);
+        res.status(401).send('Invalid token');
+        return;
+      }
+  
+      const profileImage = req.file.buffer; // Access the uploaded image buffer
+      const userId = decoded.userId;
+      if (profileImage) {
+        // Create a temporary file
+        tmp.file({ postfix: '.jpg' }, (err, tempFilePath, fd, cleanupCallback) => {
+          if (err) {
+            console.error('Error creating temporary file:', err);
+            res.status(500).send('Error uploading image');
+            return;
+          }
+  
+          // Save the profileImage buffer to the temporary file
+          fs.writeFile(tempFilePath, profileImage, (err) => {
+            if (err) {
+              console.error('Error writing to temporary file:', err);
+              res.status(500).send('Error uploading image');
+              return;
+            }
+              let imageID = null;
+            
+            // Upload the temporary file
+            uploadFile(tempFilePath, userId)
+              .then((data) => {
+                  // Insert the profile image into the database
+                let insertQuery = 'UPDATE children SET profile_image = $1 WHERE id = $2';
+          
+                client.query(insertQuery, [data, userId], (err, result) => {
+                if (err) {
+                    console.error('Error uploading image:', err);
+                    res.status(500).send('Error uploading image');
+                } else {
+                console.log('Image uploaded successfully');
+                res.send('Image uploaded successfully');
+            }
+        });
+                // https://drive.google.com/uc?export=view&id=
+              })
+              .catch((err) => {
+                console.error('Error uploading file:', err);
+              })
+              .finally(() => {
+                // Delete the temporary file
+                cleanupCallback();
+              });
+          });
+        });
+      }
+  
+   
+    });
+  });
+  
+
+  app.post('/uploadChild', upload.single('profile'), (req, res) => {
+    const authorizationHeader = req.headers.authorization;
+    if (!authorizationHeader) {
+      res.status(401).send('Unauthorized');
+      return;
+    }
+  
+    const token = authorizationHeader.replace('Bearer ', '');
+  
+    // Verify and decode the token
+    jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
+      if (err) {
+        console.log(err.message);
+        res.status(401).send('Invalid token');
+        return;
+      }
+  
+      const profileImage = req.file.buffer; // Access the uploaded image buffer
+      const userId = decoded.userId;
+      if (profileImage) {
+        // Create a temporary file
+        tmp.file({ postfix: '.jpg' }, (err, tempFilePath, fd, cleanupCallback) => {
+          if (err) {
+            console.error('Error creating temporary file:', err);
+            res.status(500).send('Error uploading image');
+            return;
+          }
+  
+          // Save the profileImage buffer to the temporary file
+          fs.writeFile(tempFilePath, profileImage, (err) => {
+            if (err) {
+              console.error('Error writing to temporary file:', err);
+              res.status(500).send('Error uploading image');
+              return;
+            }
+              let imageID = null;
+            
+            // Upload the temporary file
+            uploadFile(tempFilePath, userId)
+              .then((data) => {
+                  // Insert the profile image into the database
+                let insertQuery = 'UPDATE children SET profile_image = $1 WHERE id = $2';
+          
+                client.query(insertQuery, [data, userId], (err, result) => {
+                if (err) {
+                    console.error('Error uploading image:', err);
+                    res.status(500).send('Error uploading image');
+                } else {
+                console.log('Image uploaded successfully');
+                res.send('Image uploaded successfully');
+            }
+        });
+                // https://drive.google.com/uc?export=view&id=
+              })
+              .catch((err) => {
+                console.error('Error uploading file:', err);
+              })
+              .finally(() => {
+                // Delete the temporary file
+                cleanupCallback();
+              });
+          });
+        });
+      }
+  
+   
+    });
+  });
+  
+
+  app.post('/uploadParent', upload.single('profile'), (req, res) => {
+    const authorizationHeader = req.headers.authorization;
+    if (!authorizationHeader) {
+      res.status(401).send('Unauthorized');
+      return;
+    }
+  
+    const token = authorizationHeader.replace('Bearer ', '');
+  
+    // Verify and decode the token
+    jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
+      if (err) {
+        console.log(err.message);
+        res.status(401).send('Invalid token');
+        return;
+      }
+  
+      const profileImage = req.file.buffer; // Access the uploaded image buffer
+      const userId = decoded.userId;
+      if (profileImage) {
+        // Create a temporary file
+        tmp.file({ postfix: '.jpg' }, (err, tempFilePath, fd, cleanupCallback) => {
+          if (err) {
+            console.error('Error creating temporary file:', err);
+            res.status(500).send('Error uploading image');
+            return;
+          }
+  
+          // Save the profileImage buffer to the temporary file
+          fs.writeFile(tempFilePath, profileImage, (err) => {
+            if (err) {
+              console.error('Error writing to temporary file:', err);
+              res.status(500).send('Error uploading image');
+              return;
+            }
+              let imageID = null;
+            
+            // Upload the temporary file
+            uploadFile(tempFilePath, userId)
+              .then((data) => {
+                  // Insert the profile image into the database
+                let insertQuery = 'UPDATE users SET profile_image = $1 WHERE id = $2';
+          
+                client.query(insertQuery, [data, userId], (err, result) => {
+                if (err) {
+                    console.error('Error uploading image:', err);
+                    res.status(500).send('Error uploading image');
+                } else {
+                console.log('Image uploaded successfully');
+                res.send('Image uploaded successfully');
+            }
+        });
+                // https://drive.google.com/uc?export=view&id=
+              })
+              .catch((err) => {
+                console.error('Error uploading file:', err);
+              })
+              .finally(() => {
+                // Delete the temporary file
+                cleanupCallback();
+              });
+          });
+        });
+      }
+  
+   
+    });
+  });

@@ -45,7 +45,7 @@ const SIZES = {
   font: 14,
   radius: 12,
   padding: 24,
-
+  smallPadding: 12,
   // Font sizes
   h1: 32,
   h2: 24,

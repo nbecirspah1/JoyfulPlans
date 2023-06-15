@@ -10,8 +10,8 @@ import SecondScreen from "../screens/SecondScreen/SecondScreen";
 import Settings from "../screens/Settings/Settings";
 import SelectedTaskScreen from "../screens/SelectedTaskScreen/SelectedTaskScreen"
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-
-
+import { IsParentContext } from "../screens/loginandregister/IsParentContext";
+import AddTask from "../screens/addTask/addTask";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 import {COLORS, images, icons} from "../constants"
@@ -23,6 +23,8 @@ function MyDrawer() {
   const drawerType = dimension.width >= 700 ? 'permanent' : 'front';
   const [showSelectedTask, setShowSelectedTask] = React.useState(false);
   const navigation=useNavigation();
+  const { isParent } = useContext(IsParentContext);
+
   return (
     <ShowSelectedTaskContext.Provider
     value={{ showSelectedTask, setShowSelectedTask }}
@@ -61,6 +63,24 @@ function MyDrawer() {
   name="HomeChild"
   component={SecondScreen}
 />
+
+{
+  isParent &&   <Drawer.Screen
+  options={{
+    drawerIcon: ({ color, size }) => (
+      <Feather name="plus-square" color={color} size={size} />
+    ),
+    headerStyle: { backgroundColor: COLORS.lavander },
+    headerShadowVisible: false,
+    headerRight: () => (
+      <ScreenHeaderBtn iconUrl={images.profile} dimensions="100%" />
+    ),
+    headerTitle: '',
+  }}
+  name="Dodaj Zadatak"
+  component={AddTask}
+/>
+}
 
  {showSelectedTask && <Drawer.Screen options={{
           drawerIcon: ({ color, size }) => (

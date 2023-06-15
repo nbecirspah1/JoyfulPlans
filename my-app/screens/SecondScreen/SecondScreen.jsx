@@ -11,11 +11,12 @@ import {
 import { COLORS, SIZES, images } from "../../constants";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
-import { isParent } from "../loginandregister/IsParentContext";
+import { IsParentContext } from "../loginandregister/IsParentContext";
 
 const { height } = Dimensions.get("window");
 
 export default function SecondScreen() {
+  isParent = useContext(IsParentContext);
   const navigation = useNavigation();
   // const route = useRoute();
   // const data = route.params?.data;

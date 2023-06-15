@@ -199,7 +199,9 @@ const ImportantTasks = ({
     });
   };
   const handleAddPress = () => {
-    navigation.navigate("Settings");
+    navigation.navigate("MyDrawer", {
+      screen: "Dodaj Zadatak",
+    });
   };
   return (
     <ShowSelectedTaskContext.Provider>

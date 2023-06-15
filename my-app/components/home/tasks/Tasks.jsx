@@ -180,8 +180,11 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks, isParent }) => {
     });
   };
   const handleAddPress = () => {
-    navigation.navigate("Settings");
+    navigation.navigate("MyDrawer", {
+      screen: "Dodaj Zadatak",
+    });
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
