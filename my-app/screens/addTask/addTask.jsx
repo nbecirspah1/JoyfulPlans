@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, StyleSheet } from "react";
 import {
   View,
   Text,
@@ -11,15 +11,23 @@ import {
   FlatList,
   Image,
   Switch,
+  PermissionsAndroid,
+  Button,
+  PanResponder,
+  TouchableHighlight,
 } from "react-native";
 import styles from "./addtask.style";
 import { SIZES, COLORS, images } from "../../constants";
-import { Feather } from "@expo/vector-icons";
+import { AddSubtask, ModalPopup } from "../../components";
+import { Feather, Foundation, Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
+import { Audio } from "expo-av";
+import LottieView from "lottie-react-native";
+import animationData from "../../assets/animations/recording.json";
+const { height, width } = Dimensions.get("window");
 
 const AddTask = () => {
-  const { height, width } = Dimensions.get("window");
   const [task_name, setTask_name] = useState(null);
   const [description, setDescription] = useState(null);
   const [date, setDate] = useState(new Date());
@@ -30,6 +38,59 @@ const AddTask = () => {
   const [activeTaskType, setActiveTaskType] = useState(null);
   const [pic, setPic] = useState(null);
   const [isImportant, setIsImportant] = useState(false);
+  const [recording, setRecording] = useState();
+  const [sound, setSound] = useState(null);
+  const scrollViewRef = useRef(null);
+  const [subtasks, setSubtasks] = useState([]);
+
+  async function startRecording() {
+    try {
+      console.log("Request submission...");
+      await Audio.requestPermissionsAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+      console.log("Start recording...");
+      const recording = new Audio.Recording();
+      await recording.prepareToRecordAsync(
+        Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+      );
+      await recording.startAsync();
+      setRecording(recording);
+      console.log("Recording started");
+    } catch (err) {
+      console.log("Fauled to start recording", err);
+    }
+  }
+
+  async function stopRecording() {
+    console.log("Stopping recording...");
+    setRecording(undefined);
+    await recording.stopAndUnloadAsync();
+    const uri = recording.getURI();
+    console.log("Recording stopped and stored at", uri);
+
+    const { sound } = await recording.createNewLoadedSoundAsync();
+    setSound(sound);
+  }
+  const playSound = async () => {
+    try {
+      await sound.playAsync();
+      console.log("Playing sound");
+    } catch (err) {
+      console.error("Failed to play sound", err);
+    }
+  };
+
+  const stopSound = async () => {
+    try {
+      await sound.stopAsync();
+      console.log("Sound stopped");
+    } catch (err) {
+      console.error("Failed to stop sound", err);
+    }
+  };
 
   useEffect(() => {
     requestMediaLibraryPermission();
@@ -88,25 +149,20 @@ const AddTask = () => {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
+        ref={scrollViewRef}
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
-        style={{}}
       >
         <View
           style={{
             flex: 1,
             minHeight: height,
-            padding: SIZES.xSmall,
             backgroundColor: COLORS.lavander,
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
             padding: SIZES.padding,
           }}
         >
           {/* <Text style={styles.label}>Task:</Text> */}
-          <View style={styles.rowContainerNaslov}>
+          <View style={styles.rowContainer}>
             <TouchableOpacity onPress={uploadImage}>
               {!pic && (
                 <Image
@@ -187,7 +243,6 @@ const AddTask = () => {
               style={styles.icon}
             />
           </View>
-
           <Text
             style={{
               fontWeight: 500,
@@ -227,7 +282,6 @@ const AddTask = () => {
               style={styles.icon}
             />
           </View>
-
           <Text
             style={{
               fontWeight: 500,
@@ -260,7 +314,6 @@ const AddTask = () => {
               horizontal
             />
           </View>
-
           <View style={styles.rowContainer}>
             <Text
               style={{
@@ -284,6 +337,60 @@ const AddTask = () => {
               value={isImportant}
             />
           </View>
+          {/* <Button
+            title={recording ? "Stop recording" : "Start recording"}
+            */}
+          {/* <Button title="Play Sound" onPress={playSound} /> */}
+          {/* <Button title="Stop Sound" onPress={stopSound} /> */}
+          <Text
+            style={{
+              fontWeight: 500,
+              marginTop: 20,
+              marginBottom: 5,
+              color: COLORS.primary,
+              fontSize: 20,
+            }}
+          >
+            Kreirajte audio zapis:
+          </Text>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <TouchableOpacity style={{ alignContent: "center" }}>
+              <Ionicons name="mic-circle" size={70} color={COLORS.primary} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.rowContainerNaslov}>
+            <TouchableOpacity
+              onPressIn={startRecording}
+              onPressOut={stopRecording}
+            >
+              <Feather
+                name={recording ? "stop-circle" : "play-circle"}
+                size={50}
+                color={COLORS.primary}
+              />
+            </TouchableOpacity>
+            {!recording && (
+              <LottieView
+                source={animationData}
+                style={{ width: 60, height: 60 }}
+              />
+            )}
+            {recording && (
+              <LottieView
+                source={animationData}
+                autoPlay
+                loop
+                style={{ width: 60, height: 60 }}
+              />
+            )}
+          </View>
+          <AddSubtask subtasks={subtasks} setSubtasks={setSubtasks} />
         </View>
       </ScrollView>
     </View>

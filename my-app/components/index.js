@@ -2,9 +2,11 @@ import ScreenHeaderBtn from "./header/ScreenHeaderBtn";
 import Welcome from "./welcome/Welcome";
 import ImportantTaskCard from "./cards/important/ImportantTaskCard"
 import AddCard from "./cards/addCard/AddCard"
+import SubtaskCard from "./cards/subtaskCard/SubtaskCard"
 import AddCommonCard from "./cards/addCommonCard/AddCommonCard"
 import ImportantTasks from "./home/important/Importanttasks"
 import TaskCard from "./cards/task/TaskCard"
+import AddSubtask from "./cards/addSubtask/AddSubtask"
 import Tasks from "./home/tasks/Tasks"
 import VerticalProgressBar from "./cards/progress/VerticalProgressBar";
 import CustomDrawer from "./drawer/CustomDrawer";
@@ -28,5 +30,7 @@ export {
   DonutChart,
   AnimatedTyping,
   AddCard,
-  AddCommonCard
+  AddCommonCard,
+  AddSubtask,
+  SubtaskCard
 };

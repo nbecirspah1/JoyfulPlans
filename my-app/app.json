@@ -5,6 +5,26 @@
       "bundler": "metro"
     },
     "name": "my-app",
-    "slug": "my-app"
+    "slug": "my-app",
+    "permissions": [
+      "ACCESS_NETWORK_STATE",
+      "INTERNET",
+      "MODIFY_AUDIO_SETTINGS",
+      "WRITE_EXTERNAL_STORAGE",
+      "WAKE_LOCK",
+      "com.google.android.providers.gsf.permission.READ_GSERVICES",
+      "com.google.android.gms.permission.ACTIVITY_RECOGNITION",
+      "android.permission.FOREGROUND_SERVICE",
+      "com.android.vending.BILLING",
+      "com.google.android.finsky.BIND_GET_INSTALL_REFERRER_SERVICE",
+      "com.google.android.c2dm.permission.RECEIVE",
+      "com.google.android.gms.permission.ACTIVITY_RECOGNITION",
+      "android.permission.SYSTEM_ALERT_WINDOW",
+      "android.permission.READ_PHONE_STATE",
+      "android.permission.READ_EXTERNAL_STORAGE",
+      "android.permission.RECORD_AUDIO",
+      "android.permission.ACCESS_FINE_LOCATION",
+      "android.permission.ACCESS_COARSE_LOCATION"
+    ]
   }
 }

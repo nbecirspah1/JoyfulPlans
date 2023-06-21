@@ -90,40 +90,50 @@ const UserView = () => {
       {pic &&
         !isParent &&
         showAlert &&
-        Alert.alert("Sačuvaj promjene", "bla bla", [
-          {
-            text: "DA",
-            onPress: () => {
-              setShowAlert(false);
-              uploadProfileImageChild(pic);
+        Alert.alert(
+          "Sačuvaj promjene",
+          "Da li želite sačuvati izmjene koje ste napravili?",
+          [
+            {
+              text: "DA",
+              onPress: () => {
+                setShowAlert(false);
+                uploadProfileImageChild(pic);
+              },
             },
-          },
-          {
-            text: "NE",
-            onPress: () => {
-              setShowAlert(false);
+            {
+              text: "NE",
+              onPress: () => {
+                setPic(false);
+                setShowAlert(false);
+              },
             },
-          },
-        ])}
+          ]
+        )}
 
       {pic &&
         isParent &&
         showAlert &&
-        Alert.alert("Sačuvaj promjene", "bla bla", [
-          {
-            text: "DA",
-            onPress: () => {
-              setShowAlert(false);
-              uploadProfileImageParent(pic);
+        Alert.alert(
+          "Sačuvaj promjene",
+          "Da li želite sačuvati izmjene koje ste napravili?",
+          [
+            {
+              text: "DA",
+              onPress: () => {
+                setShowAlert(false);
+                uploadProfileImageParent(pic);
+              },
             },
-          },
-          {
-            text: "NE",
-            onPress: () => {
-              setShowAlert(false);
+            {
+              text: "NE",
+              onPress: () => {
+                setPic(false);
+                setShowAlert(false);
+              },
             },
-          },
-        ])}
+          ]
+        )}
 
       <Title style={{ color: COLORS.primary }}>{userInfo.user.name}</Title>
       <TouchableOpacity onPress={uploadImage}>

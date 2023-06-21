@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import LottieView from "lottie-react-native";
 import animationData from "../../assets/animations/confetti.json";
 import {
@@ -26,17 +26,18 @@ import { VerticalProgressBar, ModalPopup, DonutChart } from "../../components";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { FONT, SIZES, COLORS, images } from "../../constants";
 import { FontAwesome } from "@expo/vector-icons";
-import ShowSelectedTaskContext from "../../app/showSelectedTaskContext";
+import { IsParentContext } from "../loginandregister/IsParentContext";
 
 const SelectedTaskScreen = () => {
   const route = useRoute();
   const receivedData = route.params?.data;
-  const isParent = route.params?.isParent;
+  const { isParent } = useContext(IsParentContext);
   const navigation = useNavigation();
 
   // const numItems = receivedData.subtasks.length(); // Number of progressBarItems
   const [visible, setVisible] = React.useState(false);
   const spin = useSharedValue(0);
+
   const handleImagePress = () => {
     spin.value = spin.value ? 0 : 1;
   };
@@ -91,6 +92,11 @@ const SelectedTaskScreen = () => {
             minHeight: height,
             padding: SIZES.xSmall,
             backgroundColor: COLORS.lavander,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            padding: SIZES.padding,
           }}
         >
           <ModalPopup
