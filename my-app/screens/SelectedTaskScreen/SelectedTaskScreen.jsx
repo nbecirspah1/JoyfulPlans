@@ -21,7 +21,12 @@ import Animated, {
   withSpring,
   runOnUI,
 } from "react-native-reanimated";
-import { VerticalProgressBar, ModalPopup, DonutChart } from "../../components";
+import {
+  VerticalProgressBar,
+  ModalPopup,
+  DonutChart,
+  Timer,
+} from "../../components";
 // import { styles } from "./selectedtaskcreen.style";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { FONT, SIZES, COLORS, images } from "../../constants";

@@ -75,7 +75,12 @@ const styles = StyleSheet.create({
     borderColor: activeJobType === item ? COLORS.primary : "#f57db1",
 
   }),
-
+  header: {
+    width: "100%",
+    height: 20,
+    alignItems: "flex-end",
+    justifyContent: "center",
+  },
 });
 
 export default styles;

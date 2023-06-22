@@ -14,8 +14,7 @@ import UserView from "./drawer/UserView";
 import ModalPopup from "./Modal/Modal"
 import DonutChart from "./DonutChart/DonutChart"
 import AnimatedTyping from "./animated/AnimatedTyping"
-
-
+import Timer from "./cards/timer/TImer";
 export {
   ScreenHeaderBtn,
   Welcome,
@@ -32,5 +31,6 @@ export {
   AddCard,
   AddCommonCard,
   AddSubtask,
-  SubtaskCard
+  SubtaskCard,
+  Timer
 };

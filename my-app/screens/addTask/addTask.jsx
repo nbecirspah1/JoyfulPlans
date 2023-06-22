@@ -24,7 +24,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import { Audio } from "expo-av";
 import LottieView from "lottie-react-native";
-import animationData from "../../assets/animations/recording.json";
+import animationData from "../../assets/animations/recording1.json";
+import stopSoundFile from "../../assets/animations/stopSound.mp3";
 const { height, width } = Dimensions.get("window");
 
 const AddTask = () => {
@@ -42,6 +43,7 @@ const AddTask = () => {
   const [sound, setSound] = useState(null);
   const scrollViewRef = useRef(null);
   const [subtasks, setSubtasks] = useState([]);
+  const [visible, setVisible] = useState(false);
 
   async function startRecording() {
     try {
@@ -56,23 +58,44 @@ const AddTask = () => {
       await recording.prepareToRecordAsync(
         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
       );
+
+      // Play sound effect
+      const { sound } = await Audio.Sound.createAsync(
+        require("../../assets/animations/startSound.mp3")
+      );
+      await sound.playAsync();
+
       await recording.startAsync();
       setRecording(recording);
       console.log("Recording started");
     } catch (err) {
-      console.log("Fauled to start recording", err);
+      console.log("Failed to start recording", err);
     }
   }
 
   async function stopRecording() {
     console.log("Stopping recording...");
-    setRecording(undefined);
-    await recording.stopAndUnloadAsync();
-    const uri = recording.getURI();
-    console.log("Recording stopped and stored at", uri);
+    try {
+      if (recording) {
+        await recording.stopAndUnloadAsync();
+        const uri = recording.getURI();
+        console.log("Recording stopped and stored at", uri);
+        const { sound } = await recording.createNewLoadedSoundAsync();
+        const { sound: stopSound } = await Audio.Sound.createAsync(
+          stopSoundFile
+        );
+        setRecording(undefined);
+        setSound(sound);
 
-    const { sound } = await recording.createNewLoadedSoundAsync();
-    setSound(sound);
+        // Play stop sound effect
+        await stopSound.playAsync();
+        console.log("Stop sound played");
+      } else {
+        console.log("No recording to stop.");
+      }
+    } catch (err) {
+      console.log("Failed to stop recording", err);
+    }
   }
   const playSound = async () => {
     try {
@@ -161,7 +184,64 @@ const AddTask = () => {
             padding: SIZES.padding,
           }}
         >
-          {/* <Text style={styles.label}>Task:</Text> */}
+          <ModalPopup visible={visible}>
+            <View style={styles.header}>
+              <TouchableOpacity
+                onPress={() => {
+                  stopRecording();
+                  setVisible(false);
+                }}
+              >
+                <Image
+                  source={images.logo2}
+                  style={{ height: 30, width: 30 }}
+                ></Image>
+              </TouchableOpacity>
+            </View>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text
+                style={{
+                  fontWeight: 500,
+                  marginTop: 20,
+                  marginBottom: 5,
+                  color: COLORS.primary,
+                  fontSize: 20,
+                }}
+              >
+                {recording ? "Zaustavi snimanje" : "Započni snimanje"}
+              </Text>
+
+              <View style={[styles.rowContainerNaslov, { paddingTop: 20 }]}>
+                <TouchableOpacity
+                  onPressIn={startRecording}
+                  onPressOut={stopRecording}
+                >
+                  <Feather
+                    name={recording ? "stop-circle" : "play-circle"}
+                    size={50}
+                    color={COLORS.primary}
+                  />
+                </TouchableOpacity>
+                {!recording && (
+                  <LottieView
+                    source={animationData}
+                    style={{ width: 60, height: 60 }}
+                  />
+                )}
+                {recording && (
+                  <LottieView
+                    source={animationData}
+                    autoPlay
+                    loop
+                    style={{ width: 60, height: 60 }}
+                  />
+                )}
+              </View>
+            </View>
+            <Button title="Play Sound" onPress={playSound} />
+            <Button title="Stop Sound" onPress={stopSound} />
+          </ModalPopup>
+
           <View style={styles.rowContainer}>
             <TouchableOpacity onPress={uploadImage}>
               {!pic && (
@@ -340,8 +420,7 @@ const AddTask = () => {
           {/* <Button
             title={recording ? "Stop recording" : "Start recording"}
             */}
-          {/* <Button title="Play Sound" onPress={playSound} /> */}
-          {/* <Button title="Stop Sound" onPress={stopSound} /> */}
+
           <Text
             style={{
               fontWeight: 500,
@@ -360,11 +439,16 @@ const AddTask = () => {
               alignItems: "center",
             }}
           >
-            <TouchableOpacity style={{ alignContent: "center" }}>
+            <TouchableOpacity
+              style={{ alignContent: "center" }}
+              onPress={() => {
+                setVisible(true);
+              }}
+            >
               <Ionicons name="mic-circle" size={70} color={COLORS.primary} />
             </TouchableOpacity>
           </View>
-          <View style={styles.rowContainerNaslov}>
+          {/* <View style={styles.rowContainerNaslov}>
             <TouchableOpacity
               onPressIn={startRecording}
               onPressOut={stopRecording}
@@ -389,7 +473,7 @@ const AddTask = () => {
                 style={{ width: 60, height: 60 }}
               />
             )}
-          </View>
+          </View> */}
           <AddSubtask subtasks={subtasks} setSubtasks={setSubtasks} />
         </View>
       </ScrollView>
