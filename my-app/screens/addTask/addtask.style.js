@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
  
       flexDirection: "row",
       alignItems: "center",
-
+    
     
   },
   rowContainerNaslov: {
@@ -55,6 +55,17 @@ const styles = StyleSheet.create({
     marginBottom: 30
   
 },
+rowContainerAudio: {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "flex-end", // Align items on the bottom
+  marginBottom: 30
+},
+bottomAlignedContainer: {
+  flex: 1,
+  justifyContent: "flex-end", // Align items at the bottom inside the container
+},
+
   icon: {
     marginLeft: 16,
   },
@@ -81,6 +92,9 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "center",
   },
+  timer: {
+   paddingTop: 5
+  }
 });
 
 export default styles;

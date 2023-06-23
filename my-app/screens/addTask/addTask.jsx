@@ -24,10 +24,11 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import { Audio } from "expo-av";
 import LottieView from "lottie-react-native";
-import animationData from "../../assets/animations/recording1.json";
+import animationData from "../../assets/animations/recording2.json";
 import stopSoundFile from "../../assets/animations/stopSound.mp3";
+import { displayTime } from "../../components/cards/timer/utils";
 const { height, width } = Dimensions.get("window");
-
+import * as Progress from "react-native-progress";
 const AddTask = () => {
   const [task_name, setTask_name] = useState(null);
   const [description, setDescription] = useState(null);
@@ -44,7 +45,18 @@ const AddTask = () => {
   const scrollViewRef = useRef(null);
   const [subtasks, setSubtasks] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [recordingStopped, setRecordingStopped] = useState(undefined);
+  const [playingSound, setPlayingSound] = useState(true);
+  const [timer, setTimer] = useState(0);
+  const [soundTimer, setSoundTimer] = useState(0);
+  const [intervalId, setIntervalId] = useState(null); // Interval ID
+  const [soundIntervalId, setSoundIntervalId] = useState(null);
 
+  useEffect(() => {
+    if (timer === soundTimer) {
+      stopSound();
+    }
+  }, [timer, soundTimer]);
   async function startRecording() {
     try {
       console.log("Request submission...");
@@ -66,8 +78,14 @@ const AddTask = () => {
       await sound.playAsync();
 
       await recording.startAsync();
+      setTimer(0);
       setRecording(recording);
       console.log("Recording started");
+      setRecordingStopped(false);
+      const id = setInterval(() => {
+        setTimer((prevTimer) => prevTimer + 1);
+      }, 1000);
+      setIntervalId(id);
     } catch (err) {
       console.log("Failed to start recording", err);
     }
@@ -86,10 +104,12 @@ const AddTask = () => {
         );
         setRecording(undefined);
         setSound(sound);
-
+        clearInterval(intervalId);
         // Play stop sound effect
         await stopSound.playAsync();
         console.log("Stop sound played");
+        setRecordingStopped(true);
+        setPlayingSound(true);
       } else {
         console.log("No recording to stop.");
       }
@@ -101,6 +121,15 @@ const AddTask = () => {
     try {
       await sound.playAsync();
       console.log("Playing sound");
+      setSoundTimer(0);
+      const idSound = setInterval(() => {
+        setSoundTimer((prevTimer) => prevTimer + 1);
+      }, 1000);
+      setSoundIntervalId(idSound);
+      setPlayingSound(false);
+      if (timer === soundTimer) {
+        clearInterval(soundIntervalId);
+      }
     } catch (err) {
       console.error("Failed to play sound", err);
     }
@@ -110,9 +139,15 @@ const AddTask = () => {
     try {
       await sound.stopAsync();
       console.log("Sound stopped");
+      setPlayingSound(true);
+      clearInterval(soundIntervalId);
     } catch (err) {
       console.error("Failed to stop sound", err);
     }
+  };
+
+  const saveToDatabase = () => {
+    console.log("s tijelom mi se nesto desava!");
   };
 
   useEffect(() => {
@@ -208,24 +243,27 @@ const AddTask = () => {
                   fontSize: 20,
                 }}
               >
-                {recording ? "Zaustavi snimanje" : "Započni snimanje"}
+                {recording ? "Zaustavite snimanje" : "Započnite snimanje"}
               </Text>
+              {!recordingStopped && (
+                <Text style={styles.timer}>{displayTime(timer)}</Text>
+              )}
 
-              <View style={[styles.rowContainerNaslov, { paddingTop: 20 }]}>
+              <View style={[styles.rowContainerAudio]}>
                 <TouchableOpacity
                   onPressIn={startRecording}
                   onPressOut={stopRecording}
                 >
-                  <Feather
-                    name={recording ? "stop-circle" : "play-circle"}
-                    size={50}
+                  <Ionicons
+                    name={"md-mic-circle"}
+                    size={60}
                     color={COLORS.primary}
                   />
                 </TouchableOpacity>
                 {!recording && (
                   <LottieView
                     source={animationData}
-                    style={{ width: 60, height: 60 }}
+                    style={{ width: 50, height: 50 }}
                   />
                 )}
                 {recording && (
@@ -238,8 +276,43 @@ const AddTask = () => {
                 )}
               </View>
             </View>
-            <Button title="Play Sound" onPress={playSound} />
-            <Button title="Stop Sound" onPress={stopSound} />
+            {/* <Button title="Play Sound" onPress={playSound} />
+            <Button title="Stop Sound" onPress={stopSound} /> */}
+            {recordingStopped && (
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "flex-end",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <TouchableOpacity>
+                  <Ionicons
+                    name={playingSound ? "play-circle" : "stop-circle"}
+                    size={50}
+                    color={COLORS.primary}
+                    onPress={playingSound ? playSound : stopSound}
+                  />
+                </TouchableOpacity>
+
+                <View>
+                  <Progress.Bar
+                    progress={parseFloat(soundTimer) / timer}
+                    color={COLORS.icon}
+                    borderWidth={0}
+                    height={10}
+                    width={200}
+                    unfilledColor={COLORS.gray}
+                  />
+                  <View style={styles.rowContainer}>
+                    <Text style={[styles.timer, { marginRight: 120 }]}>
+                      {displayTime(timer)}
+                    </Text>
+                    <Text style={styles.timer}>{displayTime(soundTimer)} </Text>
+                  </View>
+                </View>
+              </View>
+            )}
           </ModalPopup>
 
           <View style={styles.rowContainer}>
@@ -475,6 +548,30 @@ const AddTask = () => {
             )}
           </View> */}
           <AddSubtask subtasks={subtasks} setSubtasks={setSubtasks} />
+          <TouchableOpacity onPress={saveToDatabase}>
+            <View
+              style={{
+                marginHorizontal: 50,
+                marginVertical: 10,
+                backgroundColor: COLORS.lightWhite,
+                paddingVertical: 10,
+                paddingHorizontal: 20,
+                borderRadius: 10,
+                alignItems: "center",
+                flexDirection: "row",
+              }}
+            >
+              <Ionicons
+                name={"save-outline"}
+                size={30}
+                color={COLORS.primary}
+                style={{ paddingRight: 10 }}
+              />
+              <Text style={{ color: COLORS.primary, fontWeight: "500" }}>
+                Spremite zadatak
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>

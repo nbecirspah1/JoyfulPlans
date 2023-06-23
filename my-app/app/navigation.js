@@ -55,9 +55,9 @@ function MyDrawer() {
     ),
     headerStyle: { backgroundColor: COLORS.lavander },
     headerShadowVisible: false,
-    headerRight: () => (
-      <ScreenHeaderBtn iconUrl={images.profile} dimensions="100%" />
-    ),
+    // headerRight: () => (
+    //   <ScreenHeaderBtn iconUrl={images.profile} dimensions="100%" />
+    // ),
     headerTitle: '',
   }}
   name="HomeChild"
@@ -72,9 +72,9 @@ function MyDrawer() {
     ),
     headerStyle: { backgroundColor: COLORS.lavander },
     headerShadowVisible: false,
-    headerRight: () => (
-      <ScreenHeaderBtn iconUrl={images.profile} dimensions="100%" />
-    ),
+    // headerRight: () => (
+    //   <ScreenHeaderBtn onPress={saveToDatabase} dimensions="100%" />
+    // ),
     headerTitle: '',
   }}
   name="Dodaj Zadatak"
@@ -88,9 +88,9 @@ function MyDrawer() {
           ),
   headerStyle: {backgroundColor: COLORS.lavander},
   headerShadowVisible: false,
-  headerRight: () => (
-      <ScreenHeaderBtn iconUrl={images.profile} dimensions = "100%"/>
-  ),
+  // headerRight: () => (
+  //     <ScreenHeaderBtn iconUrl={images.profile} dimensions = "100%"/>
+  // ),
   headerTitle: ""}}
  name="SelectedTask" component={SelectedTaskScreen} />}
 
@@ -101,9 +101,9 @@ function MyDrawer() {
         ),
   headerStyle: {backgroundColor: COLORS.lavander},
   headerShadowVisible: false,
-  headerRight: () => (
-      <ScreenHeaderBtn iconUrl={images.profile} dimensions = "100%"/>
-  ),
+  // headerRight: () => (
+  //     <ScreenHeaderBtn iconUrl={images.profile} dimensions = "100%"/>
+  // ),
   headerTitle: ""}}
  name="Settings" component={Settings} />
     </Drawer.Navigator>
