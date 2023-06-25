@@ -127,10 +127,63 @@ const uploadProfileImageParent = async (imageUri) => {
   }
 };
 
+const addTask = async (task) => {
+  try {
+    setIsLoading(true);
+    
+    const taskResponse = await axios.post(`${BASE_URL}/addTask`, task, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const taskID = taskResponse.data.task_id;
+    console.log('Inserted task ID:', taskID);
+
+    console.log("Task added successfully!", taskResponse.data);
+    
+    if (task.task_image) {
+      const formData = new FormData();
+      formData.append('task', {
+        name: new Date() + "_task",
+        uri: task.task_image,
+        type: 'image/jpeg', 
+      });
+
+      const imageResponse = await axios.post(`${BASE_URL}/uploadTaskImage/${taskID}`, formData, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${userInfo.token}`,
+        }
+      });
+    
+      console.log("Profile image uploaded successfully!", imageResponse.data);
+    }
+
+    const subtasksResponse = await axios.post(`${BASE_URL}/addSubtasks/${taskID}`, task.subtasks, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    setIsLoading(false);
+    return true;
+  } catch (error) {
+    console.error("Error adding task:", error);
+    setIsLoading(false);
+    return false;
+  }
+}
+
   
   
   return (
-    <AuthContext.Provider value={{ isLoading, userInfo, isParent, login, logout, loginChild, uploadProfileImageChild,uploadProfileImageParent }}>
+    <AuthContext.Provider value={{ isLoading, userInfo, isParent, login, logout, loginChild, uploadProfileImageChild,uploadProfileImageParent, addTask }}>
       {children}
     </AuthContext.Provider>
   );

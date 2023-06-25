@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, StyleSheet } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useContext,
+  StyleSheet,
+} from "react";
 import {
   View,
   Text,
@@ -15,6 +21,7 @@ import {
   Button,
   PanResponder,
   TouchableHighlight,
+  Alert,
 } from "react-native";
 import styles from "./addtask.style";
 import { SIZES, COLORS, images } from "../../constants";
@@ -29,7 +36,10 @@ import stopSoundFile from "../../assets/animations/stopSound.mp3";
 import { displayTime } from "../../components/cards/timer/utils";
 const { height, width } = Dimensions.get("window");
 import * as Progress from "react-native-progress";
+import { AuthContext } from "../../context/AuthContext";
+
 const AddTask = () => {
+  const { isLoading, userInfo, addTask } = useContext(AuthContext);
   const [task_name, setTask_name] = useState(null);
   const [description, setDescription] = useState(null);
   const [date, setDate] = useState(new Date());
@@ -147,7 +157,39 @@ const AddTask = () => {
   };
 
   const saveToDatabase = () => {
-    console.log("s tijelom mi se nesto desava!");
+    const task = {
+      task_name: task_name,
+      description: description,
+      deadline: date,
+      task_image: pic,
+      category: activeTaskType,
+      important: isImportant,
+      subtasks: subtasks,
+    };
+    if (addTask(task)) {
+      Alert.alert("Zadatak sačuvan", "Uspješno ste dodali novi zadatak!", [
+        {
+          text: "OK",
+        },
+      ]);
+      setTask_name(null);
+      setDescription(null);
+      setSound(null);
+      setInputDate("Datum");
+      setDate(new Date());
+      setIsImportant(false);
+      setActiveTaskType(null);
+      setSubtasks([]);
+      setPic(null);
+      setRecordingStopped(false);
+      setTimer(0);
+    } else {
+      Alert.alert("Došlo je do greške", "Pokušajte ponovo", [
+        {
+          text: "OK",
+        },
+      ]);
+    }
   };
 
   useEffect(() => {
@@ -306,9 +348,9 @@ const AddTask = () => {
                   />
                   <View style={styles.rowContainer}>
                     <Text style={[styles.timer, { marginRight: 120 }]}>
-                      {displayTime(timer)}
+                      {displayTime(soundTimer)}
                     </Text>
-                    <Text style={styles.timer}>{displayTime(soundTimer)} </Text>
+                    <Text style={styles.timer}>{displayTime(timer)} </Text>
                   </View>
                 </View>
               </View>
@@ -564,11 +606,11 @@ const AddTask = () => {
               <Ionicons
                 name={"save-outline"}
                 size={30}
-                color={COLORS.primary}
+                color={COLORS.icon}
                 style={{ paddingRight: 10 }}
               />
               <Text style={{ color: COLORS.primary, fontWeight: "500" }}>
-                Spremite zadatak
+                {"Spremite zadatak"}
               </Text>
             </View>
           </TouchableOpacity>
