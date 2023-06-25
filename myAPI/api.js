@@ -54,44 +54,40 @@ async function uploadFile(tempFilePath, userId){
         console.log('Upload file error', err)
     }
 }  
-// async function uploadFile(profileImage, userId){
-//     try{
-//         const auth = new google.auth.GoogleAuth({
-//             keyFile: './googlekey.json',
-//             scopes: ['https://www.googleapis.com/auth/drive']
-//         })
+async function uploadAudio(tempFilePath, userId) {
+  try {
+    const auth = new google.auth.GoogleAuth({
+      keyFile: './googlekey.json',
+      scopes: ['https://www.googleapis.com/auth/drive']
+    });
 
-//         const driveService = google.drive({
-//             version: 'v3',
-//             auth
-//         })
+    const driveService = google.drive({
+      version: 'v3',
+      auth
+    });
 
-//         const fileMetaData = {
-//             'name': userId+'.jpg',
-//             'parents': [GOOGLE_API_FOLDER_ID]
-//         }
+    const fileMetaData = {
+      'name': userId + '.mp3', // or any other suitable audio file extension
+      'parents': [GOOGLE_API_FOLDER_ID]
+    };
 
-//         const media = {
-//             mimeType: 'image/jpg',
-//             body: fs.createReadStream(profileImage)
-//         }
+    const media = {
+      mimeType: 'audio/mp3', // or the appropriate MIME type for your audio file
+      body: fs.createReadStream(tempFilePath)
+    };
 
-//         const response = await driveService.files.create({
-//             resource: fileMetaData,
-//             media: media,
-//             field: 'id'
-//         })
-//         return response.data.id
+    const response = await driveService.files.create({
+      resource: fileMetaData,
+      media: media,
+      fields: 'id' // use 'fields' instead of 'field'
+    });
 
-//     }catch(err){
-//         console.log('Upload file error', err)
-//     }
-// }
+    return response.data.id;
+  } catch (err) {
+    console.log('Upload file error', err);
+  }
+}
 
-// uploadFile().then(data => {
-//     console.log(data)
-//     // https://drive.google.com/uc?export=view&id=
-// })
 
 app.get('/users', (req, res)=>{
     client.query(`Select * from users`, (err, result)=>{
@@ -352,75 +348,6 @@ app.post("/login", (req, res) => {
   });
   
 
-  app.post('/uploadTaskImage/:id', upload.single('task'), (req, res) => {
-    const authorizationHeader = req.headers.authorization;
-    if (!authorizationHeader) {
-      res.status(401).send('Unauthorized');
-      return;
-    }
-  
-    const token = authorizationHeader.replace('Bearer ', '');
-  
-    // Verify and decode the token
-    jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
-      if (err) {
-        console.log(err.message);
-        res.status(401).send('Invalid token');
-        return;
-      }
-  
-      const taskImage = req.file.buffer; // Access the uploaded image buffer
-      const task_id= req.params.id
-
-
-        // Create a temporary file
-        tmp.file({ postfix: '.jpg' }, (err, tempFilePath, fd, cleanupCallback) => {
-          if (err) {
-            console.error('Error creating temporary file:', err);
-            res.status(500).send('Error uploading image');
-            return;
-          }
-  
-          // Save the profileImage buffer to the temporary file
-          fs.writeFile(tempFilePath, taskImage, (err) => {
-            if (err) {
-              console.error('Error writing to temporary file:', err);
-              res.status(500).send('Error uploading image');
-              return;
-            }
-              let imageID = null;
-            
-            // Upload the temporary file
-            uploadFile(tempFilePath, "task"+task_id)
-              .then((data) => {
-                  // Insert the profile image into the database
-                let insertQuery = 'UPDATE tasks SET task_image = $1 WHERE task_id = $2';
-          
-                client.query(insertQuery, [data, task_id], (err, result) => {
-                if (err) {
-                    console.error('Error uploading image:', err);
-                    res.status(500).send('Error uploading image');
-                } else {
-                console.log('Image uploaded successfully');
-                res.send('Image uploaded successfully');
-            }
-        });
-                // https://drive.google.com/uc?export=view&id=
-              })
-              .catch((err) => {
-                console.error('Error uploading file:', err);
-              })
-              .finally(() => {
-                // Delete the temporary file
-                cleanupCallback();
-              });
-          });
-        });
-      
-  
-   
-    });
-  });
   
 
   app.post('/uploadChild', upload.single('profile'), (req, res) => {
@@ -564,6 +491,146 @@ app.post("/login", (req, res) => {
     });
   });
 
+  app.post('/uploadTaskImage/:id', upload.single('task'), (req, res) => {
+    const authorizationHeader = req.headers.authorization;
+    if (!authorizationHeader) {
+      res.status(401).send('Unauthorized');
+      return;
+    }
+  
+    const token = authorizationHeader.replace('Bearer ', '');
+  
+    // Verify and decode the token
+    jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
+      if (err) {
+        console.log(err.message);
+        res.status(401).send('Invalid token');
+        return;
+      }
+  
+      const taskImage = req.file.buffer; // Access the uploaded image buffer
+      const task_id= req.params.id
+
+
+        // Create a temporary file
+        tmp.file({ postfix: '.jpg' }, (err, tempFilePath, fd, cleanupCallback) => {
+          if (err) {
+            console.error('Error creating temporary file:', err);
+            res.status(500).send('Error uploading image');
+            return;
+          }
+  
+          // Save the profileImage buffer to the temporary file
+          fs.writeFile(tempFilePath, taskImage, (err) => {
+            if (err) {
+              console.error('Error writing to temporary file:', err);
+              res.status(500).send('Error uploading image');
+              return;
+            }
+              let imageID = null;
+            
+            // Upload the temporary file
+            uploadFile(tempFilePath, "task"+task_id)
+              .then((data) => {
+                  // Insert the profile image into the database
+                let insertQuery = 'UPDATE tasks SET task_image = $1 WHERE task_id = $2';
+          
+                client.query(insertQuery, [data, task_id], (err, result) => {
+                if (err) {
+                    console.error('Error uploading image:', err);
+                    res.status(500).send('Error uploading image');
+                } else {
+                console.log('Image uploaded successfully');
+                res.send('Image uploaded successfully');
+            }
+        });
+                // https://drive.google.com/uc?export=view&id=
+              })
+              .catch((err) => {
+                console.error('Error uploading file:', err);
+              })
+              .finally(() => {
+                // Delete the temporary file
+                cleanupCallback();
+              });
+          });
+        });
+      
+  
+   
+    });
+  });
+  
+  app.post('/uploadTaskAudio/:id', upload.single('audio'), (req, res) => {
+    console.log("EVO ME U RUTIIII")
+    const authorizationHeader = req.headers.authorization;
+    if (!authorizationHeader) {
+      res.status(401).send('Unauthorized');
+      return;
+    }
+  
+    const token = authorizationHeader.replace('Bearer ', '');
+  
+    // Verify and decode the token
+    jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
+      if (err) {
+        console.log(err.message);
+        res.status(401).send('Invalid token');
+        return;
+      }
+  
+      const taskAudio = req.file.buffer; // Access the uploaded image buffer
+      const task_id= req.params.id
+
+
+        // Create a temporary file
+        tmp.file({ postfix: '.mp3' }, (err, tempFilePath, fd, cleanupCallback) => {
+          if (err) {
+            console.error('Error creating temporary file:', err);
+            res.status(500).send('Error uploading image');
+            return;
+          }
+  
+          // Save the profileImage buffer to the temporary file
+          fs.writeFile(tempFilePath, taskAudio, (err) => {
+            if (err) {
+              console.error('Error writing to temporary file:', err);
+              res.status(500).send('Error uploading image');
+              return;
+            }
+            
+            // Upload the temporary file
+            uploadAudio(tempFilePath, "taskAudio"+task_id)
+              .then((data) => {
+                  // Insert the profile image into the database
+                let insertQuery = 'UPDATE tasks SET task_audio = $1 WHERE task_id = $2';
+          
+                client.query(insertQuery, [data, task_id], (err, result) => {
+                if (err) {
+                    console.error('Error uploading audio:', err);
+                    res.status(500).send('Error uploading audio');
+                } else {
+                console.log('Audio uploaded successfully');
+                res.send('Audio uploaded successfully');
+            }
+        });
+                // https://drive.google.com/uc?export=view&id=
+              })
+              .catch((err) => {
+                console.error('Error uploading file:', err);
+              })
+              .finally(() => {
+                // Delete the temporary file
+                cleanupCallback();
+              });
+          });
+        });
+      
+  
+   
+    });
+  });
+  
 
   app.post('/addTask', (req, res)=> {
     const authorizationHeader = req.headers.authorization;

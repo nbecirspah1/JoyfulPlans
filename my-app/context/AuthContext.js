@@ -4,7 +4,7 @@ import axios from 'axios';
 import { BASE_URL } from "../config.js";
 import { IsParentContext } from "../screens/loginandregister/IsParentContext.js";
 export const AuthContext = createContext();
-
+import * as FileSystem from 'expo-file-system';
 export const AuthProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -145,6 +145,7 @@ const addTask = async (task) => {
     console.log("Task added successfully!", taskResponse.data);
     
     if (task.task_image) {
+      console.log("OVO JE SLIKAAA", task.task_image)
       const formData = new FormData();
       formData.append('task', {
         name: new Date() + "_task",
@@ -162,6 +163,7 @@ const addTask = async (task) => {
     
       console.log("Profile image uploaded successfully!", imageResponse.data);
     }
+    if(task.subtasks.length != 0){
 
     const subtasksResponse = await axios.post(`${BASE_URL}/addSubtasks/${taskID}`, task.subtasks, {
       headers: {
@@ -170,7 +172,47 @@ const addTask = async (task) => {
         'Content-Type': 'application/json'
       }
     });
+   
+  }
+    // ...
+    
+    if (task.audio) {
 
+        const audioUri = task.audio;
+      
+        // const audioContent = await FileSystem.readAsStringAsync(audioUri, {
+        //   encoding: FileSystem.EncodingType.Base64,
+        // });
+    
+        // const audioBlob = new Blob([audioContent], { type: 'audio/3gp' });
+        // const audioFile = new File([audioBlob], new Date() + '_audio.3gp');
+
+        
+        const formData1 = new FormData();
+        // formData1.append('audio', audioFile);
+        formData1.append('audio', {
+          name: new Date() + "_task",
+          uri: task.audio,
+          type: 'audio/3gp', 
+        });
+    
+        const imageResponse = await axios.post(
+          `${BASE_URL}/uploadTaskAudio/${taskID}`,
+          formData1,
+          {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer ${userInfo.token}`,
+            },
+          }
+        );
+    
+        console.log('Audio uploaded successfully!', imageResponse.data);
+     
+    }
+    
+    
     setIsLoading(false);
     return true;
   } catch (error) {

@@ -61,7 +61,7 @@ const AddTask = () => {
   const [soundTimer, setSoundTimer] = useState(0);
   const [intervalId, setIntervalId] = useState(null); // Interval ID
   const [soundIntervalId, setSoundIntervalId] = useState(null);
-
+  const [audioUri, setAudioUri] = useState(null);
   useEffect(() => {
     if (timer === soundTimer) {
       stopSound();
@@ -114,6 +114,7 @@ const AddTask = () => {
         );
         setRecording(undefined);
         setSound(sound);
+        setAudioUri(uri);
         clearInterval(intervalId);
         // Play stop sound effect
         await stopSound.playAsync();
@@ -165,6 +166,7 @@ const AddTask = () => {
       category: activeTaskType,
       important: isImportant,
       subtasks: subtasks,
+      audio: audioUri,
     };
     if (addTask(task)) {
       Alert.alert("Zadatak sačuvan", "Uspješno ste dodali novi zadatak!", [
