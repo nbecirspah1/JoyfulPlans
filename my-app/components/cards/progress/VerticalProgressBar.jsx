@@ -81,7 +81,7 @@ const VerticalProgressBar = ({
           fontWeight: fontWeight,
         }}
       >
-        {item.task_name}
+        {item.name}
       </Text>
       <TouchableOpacity onPress={handleClick}>
         <FontAwesome name="check-circle" size={50} color={iconColor} />

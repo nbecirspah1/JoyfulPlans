@@ -8,8 +8,9 @@ import * as ImagePicker from "expo-image-picker";
 import { requestMediaLibraryPermission } from "../../utils/utils";
 
 // import { checkImageURL } from "../../../../utils";
-const TaskCard = ({ item, selcetedTask, handleCardPress, src, setSrc }) => {
+const TaskCard = ({ navigation, item, setSelectedTask, isParent }) => {
   const [iconName, setIconName] = useState("");
+  const [src1, setSrc1] = useState(null);
 
   useEffect(() => {
     if (item.category === "Škola") {
@@ -24,22 +25,35 @@ const TaskCard = ({ item, selcetedTask, handleCardPress, src, setSrc }) => {
       const base64WithoutPrefix = item.task_image.substring(
         item.task_image.indexOf(",") + 1
       );
-      setSrc(
+      setSrc1(
         `https://drive.google.com/uc?export=view&id=${base64WithoutPrefix}`
       );
     }
   }, []);
+
+  const handleCardPress = (item) => {
+    setSelectedTask(item.task_id);
+
+    navigation.navigate("MyDrawer", {
+      screen: "SelectedTask",
+      params: { data: item, isParent: isParent, src: src1 },
+    });
+  };
   return (
     <TouchableOpacity
       style={styles.container(item)}
-      onPress={() => handleCardPress(item)}
+      onPress={() => {
+        handleCardPress(item);
+      }}
     >
       <TouchableOpacity
         style={styles.logoContainer}
-        onPress={() => handleCardPress(item)}
+        onPress={() => {
+          handleCardPress(item);
+        }}
       >
         <Image
-          source={src ? { uri: src } : images.profile}
+          source={src1 ? { uri: src1 } : images.profile}
           resizeMode="contain"
           style={styles.logoImage}
         />

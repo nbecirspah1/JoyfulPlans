@@ -23,7 +23,6 @@ const ImportantTasks = ({
   const isLoading = false;
   const error = false;
   const currentDate = new Date();
-  const [src, setSrc] = useState(null);
   const options = { day: "2-digit", month: "2-digit", year: "numeric" };
   const formattedCurrentDate = currentDate.toLocaleDateString("en-GB", options);
 
@@ -65,29 +64,12 @@ const ImportantTasks = ({
   const { setShowSelectedTask } = useContext(ShowSelectedTaskContext);
 
   const [selectedTask, setSelectedTask] = useState();
-  const handleCardPress = (item) => {
-    // router.push(`/job-details/${item.job_id}`);
-    setSelectedTask(item.task_id);
-    // formButtonScale.value = withSequence(withSpring(1.5), withSpring(1));
-    // navigation.navigate("SelectedTask", { data: item });
-    // const parentNavigator = navigation.dangerouslyGetParent();
-    // parentNavigator.navigate("HomeChild", {
-    //   screen: "HomeChild",
-    //   params: { data },
-    // });
-    // navigation.setParams({ childData: dataToSend });
-
-    setShowSelectedTask(true);
-    navigation.navigate("MyDrawer", {
-      screen: "SelectedTask",
-      params: { data: item, isParent: isParent, src: src },
-    });
-  };
   const handleAddPress = () => {
     navigation.navigate("MyDrawer", {
       screen: "Dodaj Zadatak",
     });
   };
+
   return (
     <ShowSelectedTaskContext.Provider>
       <View style={styles.container}>
@@ -115,9 +97,10 @@ const ImportantTasks = ({
                       <ImportantTaskCard
                         item={item}
                         selectedTask={selectedTask}
-                        handleCardPress={handleCardPress}
-                        src={src}
-                        setSrc={setSrc}
+                        isParent={isParent}
+                        navigation={navigation}
+                        setSelectedTask={setSelectedTask}
+                        setShowSelectedTask={setShowSelectedTask}
                       />
                       <AddCard handleAddPress={handleAddPress} />
                     </>
@@ -127,10 +110,10 @@ const ImportantTasks = ({
                     <ImportantTaskCard
                       item={item}
                       selectedTask={selectedTask}
-                      handleCardPress={handleCardPress}
-                      src={src}
-                      setSrc={setSrc}
-                      s
+                      isParent={isParent}
+                      navigation={navigation}
+                      setSelectedTask={setSelectedTask}
+                      setShowSelectedTask={setShowSelectedTask}
                     />
                   );
                 }

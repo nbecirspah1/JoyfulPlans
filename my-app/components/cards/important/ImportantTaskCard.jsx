@@ -7,14 +7,15 @@ import { COLORS, images } from "../../../constants";
 import * as ImagePicker from "expo-image-picker";
 import { requestMediaLibraryPermission } from "../../utils/utils";
 const ImportantTaskCard = ({
+  navigation,
+  isParent,
   item,
   selectedTask,
-  handleCardPress,
-  src,
-  setSrc,
+  setSelectedTask,
+  setShowSelectedTask,
 }) => {
   const [iconName, setIconName] = useState("");
-
+  const [src1, setSrc1] = useState(null);
   useEffect(() => {
     if (item.category === "Škola") {
       setIconName("graduation-cap");
@@ -28,16 +29,27 @@ const ImportantTaskCard = ({
       const base64WithoutPrefix = item.task_image.substring(
         item.task_image.indexOf(",") + 1
       );
-      setSrc(
+      setSrc1(
         `https://drive.google.com/uc?export=view&id=${base64WithoutPrefix}`
       );
     }
   }, []);
 
+  const handleCardPress = (item) => {
+    setSelectedTask(item.task_id);
+    setShowSelectedTask(true);
+    navigation.navigate("MyDrawer", {
+      screen: "SelectedTask",
+      params: { data: item, isParent: isParent, src: src1 },
+    });
+  };
+
   return (
     <TouchableOpacity
       style={styles.container(selectedTask, item)}
-      onPress={() => handleCardPress(item)}
+      onPress={() => {
+        handleCardPress(item);
+      }}
     >
       {iconName === "graduation-cap" && (
         <FontAwesome
@@ -71,10 +83,12 @@ const ImportantTaskCard = ({
       )}
       <TouchableOpacity
         style={styles.logoContainer(selectedTask, item)}
-        onPress={() => handleCardPress(item)}
+        onPress={() => {
+          handleCardPress(item);
+        }}
       >
         <Image
-          source={src ? { uri: src } : images.profile}
+          source={src1 ? { uri: src1 } : images.profile}
           resizeMode="contain"
           style={styles.logoImage}
         />

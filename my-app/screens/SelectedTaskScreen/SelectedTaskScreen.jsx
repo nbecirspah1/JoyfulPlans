@@ -38,15 +38,15 @@ const SelectedTaskScreen = () => {
   const receivedData = route.params?.data;
   const src = route.params?.src;
   const { isParent } = useContext(IsParentContext);
-  const { tasks, getSubtasks } = useContext(AuthContext);
+  const { subtasks, getSubtasks } = useContext(AuthContext);
   const navigation = useNavigation();
-  receivedData.subtasks = tasks;
+  receivedData.subtasks = subtasks;
   const dateString = receivedData.deadline;
   const date = new Date(dateString);
   const formattedDate = date.toLocaleDateString("en-GB");
   useEffect(() => {
     getSubtasks(receivedData.task_id);
-  }, []);
+  }, [receivedData]);
   // const numItems = receivedData.subtasks.length(); // Number of progressBarItems
   const [visible, setVisible] = React.useState(false);
   const spin = useSharedValue(0);

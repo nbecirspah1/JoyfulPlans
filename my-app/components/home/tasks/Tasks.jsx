@@ -56,18 +56,6 @@ const Tasks = ({
     setNumberOfTasks(filteredData.length);
   }, [filteredData]);
 
-  const handleCardPress = (item) => {
-    // router.push(`/job-details/${item.job_id}`);
-    setSelectedTask(item.task_id);
-    // formButtonScale.value = withSequence(withSpring(1.5), withSpring(1));
-    // navigation.navigate("SelectedTask", { data: item });
-    // console.log("ITEEEEEM", item);
-
-    navigation.navigate("MyDrawer", {
-      screen: "SelectedTask",
-      params: { data: item, isParent: isParent, src: src },
-    });
-  };
   const handleAddPress = () => {
     navigation.navigate("MyDrawer", {
       screen: "Dodaj Zadatak",
@@ -100,9 +88,9 @@ const Tasks = ({
                     <TaskCard
                       item={item}
                       selectedTask={selectedTask}
-                      handleCardPress={handleCardPress}
-                      src={src}
-                      setSrc={setSrc}
+                      navigation={navigation}
+                      isParent={isParent}
+                      setSelectedTask={setSelectedTask}
                     />
                     <AddCommonCard handleAddPress={handleAddPress} />
                   </>
@@ -112,9 +100,9 @@ const Tasks = ({
                   <TaskCard
                     item={item}
                     selectedTask={selectedTask}
-                    handleCardPress={handleCardPress}
-                    src={src}
-                    setSrc={setSrc}
+                    isParent={isParent}
+                    navigation={navigation}
+                    setSelectedTask={setSelectedTask}
                   />
                 );
               }

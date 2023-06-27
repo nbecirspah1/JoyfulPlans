@@ -765,28 +765,31 @@ app.get('/tasks', (req, res)=>{
   });
 })
 
-app.get('/subtasks/:id', (req, res)=>{
-  const task_id= req.params.id
+app.get('/subtasks/:id', (req, res) => {
+  const task_id = req.params.id;
   const authorizationHeader = req.headers.authorization;
+
   if (!authorizationHeader) {
     res.status(401).send('Unauthorized');
     return;
   }
+
   const token = authorizationHeader.replace('Bearer ', '');
+
   jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
     if (err) {
       console.log(err.message);
       res.status(401).send('Invalid token');
       return;
     }
-         childID=result.rows
-         client.query(`Select * from subtasks where task_id='${task_id}'`, (err, result)=>{
-          if(!err){
-              res.send(result.rows);
-          }else{
-              console.log(err.message)
-          }
-      });
-      
-})
-})
+
+    client.query(`SELECT * FROM subtasks WHERE task_id='${task_id}'`, (err, result) => {
+      if (!err) {
+        res.send(result.rows);
+      } else {
+        console.log(err.message);
+        res.status(500).send('Internal server error');
+      }
+    });
+  });
+});

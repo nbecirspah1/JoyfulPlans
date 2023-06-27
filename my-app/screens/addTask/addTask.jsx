@@ -196,6 +196,13 @@ const AddTask = () => {
         },
       ]);
       return;
+    } else if (subtasks.length === 0) {
+      Alert.alert("Greška", "Potrebno je dodati barem jedan podzadatak ", [
+        {
+          text: "OK",
+        },
+      ]);
+      return;
     }
     const task = {
       task_name: task_name,
@@ -208,11 +215,6 @@ const AddTask = () => {
       audio: audioUri,
     };
     if (addTask(task)) {
-      Alert.alert("Zadatak sačuvan", "Uspješno ste dodali novi zadatak!", [
-        {
-          text: "OK",
-        },
-      ]);
       setTask_name(null);
       setDescription(null);
       setSound(null);

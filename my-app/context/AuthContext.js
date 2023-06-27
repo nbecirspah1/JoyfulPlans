@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useState, useContext } from "react";
+import {Alert} from "react-native";
 import axios from 'axios';
 import { BASE_URL } from "../config.js";
 import { IsParentContext } from "../screens/loginandregister/IsParentContext.js";
@@ -216,6 +217,11 @@ const addTask = async (task) => {
     
     
     setIsLoading(false);
+    Alert.alert("Zadatak sačuvan", "Uspješno ste dodali novi zadatak!", [
+      {
+        text: "OK",
+      },
+    ]);
     getTasks()
     return true;
   } catch (error) {
@@ -255,7 +261,7 @@ const getSubtasks = async(taskId) =>{
         'Content-Type': 'application/json'
       }
     });
-    console.log(response.data)
+    console.log("Subtaskoviiiiiiiiii", response.data)
     setSubtasks(response.data)
     return response.data; // Handle the response data as per your requirement
 
