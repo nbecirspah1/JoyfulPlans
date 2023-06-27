@@ -33,19 +33,25 @@ import { FONT, SIZES, COLORS, images } from "../../constants";
 import { FontAwesome } from "@expo/vector-icons";
 import { IsParentContext } from "../loginandregister/IsParentContext";
 import { AuthContext } from "../../context/AuthContext";
+import Spinner from "react-native-loading-spinner-overlay";
+
 const SelectedTaskScreen = () => {
   const route = useRoute();
   const receivedData = route.params?.data;
   const src = route.params?.src;
   const { isParent } = useContext(IsParentContext);
-  const { subtasks, getSubtasks } = useContext(AuthContext);
+  const { isLoading, getSubtasks, subtasks, setSubtaskDone } =
+    useContext(AuthContext);
   const navigation = useNavigation();
   receivedData.subtasks = subtasks;
   const dateString = receivedData.deadline;
   const date = new Date(dateString);
   const formattedDate = date.toLocaleDateString("en-GB");
+  console.log("RECEIVEEEEEED DATAAAAA", receivedData);
   useEffect(() => {
     getSubtasks(receivedData.task_id);
+    // setPreviousProgressValue(0);
+    // setProgressValue(0);
   }, [receivedData]);
   // const numItems = receivedData.subtasks.length(); // Number of progressBarItems
   const [visible, setVisible] = React.useState(false);
@@ -112,6 +118,8 @@ const SelectedTaskScreen = () => {
             padding: SIZES.padding,
           }}
         >
+          <Spinner visible={isLoading} />
+
           <ModalPopup
             visible={visible}
             progressValue={progressValue}
@@ -272,6 +280,7 @@ const SelectedTaskScreen = () => {
                       setProgressValue={setProgressValue}
                       setPreviousProgressValue={setPreviousProgressValue}
                       isParent={isParent}
+                      setSubtaskDone={setSubtaskDone}
                     />
                   </View>
                 ))}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Animated, {
@@ -7,6 +7,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SIZES, FONT, COLORS } from "../../../constants";
+// import { AuthContext } from "../../../context/AuthContext";
 
 const VerticalProgressBar = ({
   item,
@@ -15,7 +16,10 @@ const VerticalProgressBar = ({
   setProgressValue,
   setPreviousProgressValue,
   isParent,
+  setSubtaskDone,
 }) => {
+  // const { isLoading, setSubtaskDone } = useContext(AuthContext);
+
   const containerColor = useSharedValue(
     item.done ? COLORS.mintGreen : "#ACAC9A"
   );
@@ -29,27 +33,41 @@ const VerticalProgressBar = ({
       containerColor.value = COLORS.mintGreen;
       setIconColor(COLORS.icon);
       setFontWeight(500);
+    } else {
+      containerColor.value = "#ACAC9A";
+      setIconColor("#474838");
     }
     const numItems = receivedData.subtasks.filter(
       (item) => item.done === true
     ).length;
     setProgressValue(numItems / receivedData.subtasks.length);
     setPreviousProgressValue((numItems - 1) / receivedData.subtasks.length);
-  }, [item.done]);
-  const handleClick = () => {
-    if (!item.done && !isParent) {
-      containerColor.value = COLORS.mintGreen; // Change the color when container is clicked
-      setIconColor(COLORS.icon);
-      setFontWeight(500);
-      item.done = true;
-      setVisible(true);
-    }
+  }, [item, receivedData, item.done]);
 
-    // setTimeout(() => {
-    //   setVisible(false);
-    // }, 2000); // Adjust the delay time as needed (in milliseconds)
-    // console.log("POSLIJEE 2", visible);
+  const handleClick = async () => {
+    try {
+      if (!item.done && !isParent) {
+        containerColor.value = COLORS.mintGreen;
+        setIconColor(COLORS.icon);
+        setFontWeight(500);
+        item.done = true;
+        setVisible(true);
+        await setSubtaskDone(item.subtask_id);
+        console.log("Subtask marked as done successfully");
+      }
+    } catch (error) {
+      console.log(
+        "Error marking subtask as done:",
+        error.response?.data || error.message
+      );
+    }
   };
+
+  // setTimeout(() => {
+  //   setVisible(false);
+  // }, 2000); // Adjust the delay time as needed (in milliseconds)
+  // console.log("POSLIJEE 2", visible);
+  // };
 
   const containerStyle = useAnimatedStyle(() => {
     return {
@@ -74,17 +92,27 @@ const VerticalProgressBar = ({
         containerStyle,
       ]}
     >
-      <Text
-        style={{
-          fontSize: 16,
-          textAlign: "center",
-          fontWeight: fontWeight,
-        }}
-      >
-        {item.name}
-      </Text>
       <TouchableOpacity onPress={handleClick}>
-        <FontAwesome name="check-circle" size={50} color={iconColor} />
+        <FontAwesome name="check-circle" size={30} color={iconColor} />
+
+        <Text
+          style={{
+            fontSize: 20,
+            textAlign: "center",
+            fontWeight: 500,
+          }}
+        >
+          {item.name}
+        </Text>
+        <Text
+          style={{
+            fontSize: 16,
+            textAlign: "center",
+            fontWeight: fontWeight,
+          }}
+        >
+          {item.description}
+        </Text>
       </TouchableOpacity>
     </Animated.View>
   );
