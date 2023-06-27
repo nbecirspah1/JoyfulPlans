@@ -10,22 +10,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: SIZES.medium,
     borderRadius: SIZES.small,
-    backgroundColor: item.task_type === "kuća" ? "#FBEA73" : item.task_type === "higijena" ? "#D4ADF8" : COLORS.lightWhite,
+    backgroundColor: item.category === "Kuća" ? "#FBEA73" : item.category === "Higijena" ? "#D4ADF8" : COLORS.lightWhite,
     ...SHADOWS.medium,
     shadowColor: COLORS.white,
   }),
   logoContainer: {
+     backgroundColor: COLORS.white,
     width: 50,
     height: 50,
-    backgroundColor: COLORS.white,
-    borderRadius: SIZES.medium,
+    borderRadius: SIZES.small,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden", // add this to clip the image to the circle
+    alignSelf: "center", // add this to center the container horizontally
   },
   logoImage: {
     width: "100%",
     height: "100%",
     resizeMode: "cover", // add this to adjust the image to the shape of the container
+
   },
   textContainer: {
     flex: 1,

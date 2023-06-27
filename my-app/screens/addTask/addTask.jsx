@@ -158,6 +158,45 @@ const AddTask = () => {
   };
 
   const saveToDatabase = () => {
+    if (task_name === null || task_name.replace(/\s/g, "").length === 0) {
+      Alert.alert("Greška", "Niste unijeli naslov zadatka", [
+        {
+          text: "OK",
+        },
+      ]);
+      return;
+    } else if (pic === null) {
+      Alert.alert("Greška", "Niste unijeli sliku zadatka", [
+        {
+          text: "OK",
+        },
+      ]);
+      return;
+    } else if (
+      description === null ||
+      description.replace(/\s/g, "").length === 0
+    ) {
+      Alert.alert("Greška", "Niste unijeli opis zadatka", [
+        {
+          text: "OK",
+        },
+      ]);
+      return;
+    } else if (inputDate === "Datum") {
+      Alert.alert("Greška", "Niste unijeli datum", [
+        {
+          text: "OK",
+        },
+      ]);
+      return;
+    } else if (activeTaskType === null) {
+      Alert.alert("Greška", "Niste odabrali kategoriju zadatka", [
+        {
+          text: "OK",
+        },
+      ]);
+      return;
+    }
     const task = {
       task_name: task_name,
       description: description,
@@ -565,32 +604,7 @@ const AddTask = () => {
               <Ionicons name="mic-circle" size={70} color={COLORS.primary} />
             </TouchableOpacity>
           </View>
-          {/* <View style={styles.rowContainerNaslov}>
-            <TouchableOpacity
-              onPressIn={startRecording}
-              onPressOut={stopRecording}
-            >
-              <Feather
-                name={recording ? "stop-circle" : "play-circle"}
-                size={50}
-                color={COLORS.primary}
-              />
-            </TouchableOpacity>
-            {!recording && (
-              <LottieView
-                source={animationData}
-                style={{ width: 60, height: 60 }}
-              />
-            )}
-            {recording && (
-              <LottieView
-                source={animationData}
-                autoPlay
-                loop
-                style={{ width: 60, height: 60 }}
-              />
-            )}
-          </View> */}
+
           <AddSubtask subtasks={subtasks} setSubtasks={setSubtasks} />
           <TouchableOpacity onPress={saveToDatabase}>
             <View

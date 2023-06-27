@@ -5,128 +5,17 @@ import styles from "./tasks.style";
 import { COLORS, SIZES } from "../../../constants";
 // import useFetch from "../../../hook/useFetch";
 import { TaskCard, AddCommonCard } from "../../";
-const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks, isParent }) => {
-  //   const router = useRouter();
-  // const isLoading = false;
-  // const error = false;
-  // const { data, isLoading, error } = useFetch("search", {
-  //   query: "React developer",
-  //   num_pages: 1,
-  // });
-  // console.log(data);
-  const data = [
-    {
-      task_id: 1,
-      task_name: "Complete project report",
-      employer_logo: require("../../../assets/images/pranjeSudja.png"),
-      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "07/06/2023",
-      task_type: "kuća",
-      subtasks: [
-        {
-          task_id: 1,
-          task_name: "1. podtask",
-          description: "1.opis",
-          done: false,
-        },
-        {
-          task_id: 2,
-          task_name: "2. podtask",
-          description: "2.opis",
-          done: false,
-        },
-        {
-          task_id: 3,
-          task_name: "3. podtask",
-          description: "3.opis",
-          done: false,
-        },
-        {
-          task_id: 4,
-          task_name: "4. podtask",
-          description: "4.opis",
-          done: false,
-        },
-        {
-          task_id: 5,
-          task_name: "5. podtask",
-          description: "5.opis",
-          done: false,
-        },
-      ],
-    },
-    {
-      task_id: 2,
-      task_name: "Prepare for meeting",
-      employer_logo: require("../../../assets/images/pranjeSudja.png"),
-      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "07/06/2023",
-      task_type: "higijena",
-      subtasks: [
-        {
-          task_id: 1,
-          task_name: "1. podtask",
-          description: "1.opis",
-          done: false,
-        },
-        {
-          task_id: 2,
-          task_name: "2. podtask",
-          description: "2.opis",
-          done: false,
-        },
-      ],
-    },
-    {
-      task_id: 3,
-      task_name: "Follow up with clients",
-      employer_logo: require("../../../assets/images/pranjeSudja.png"),
-      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "09/06/2023",
-      task_type: "škola",
-      subtasks: [
-        {
-          task_id: 1,
-          task_name: "1. podtask",
-          description: "1.opis",
-          done: false,
-        },
-        {
-          task_id: 2,
-          task_name: "2. podtask",
-          description: "2.opis",
-          done: false,
-        },
-      ],
-    },
-    {
-      task_id: 4,
-      task_name: "Organize files",
-      employer_logo: require("../../../assets/images/pranjeSudja.png"),
-      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "15/06/2023",
-      task_type: "škola",
-      subtasks: [
-        {
-          task_id: 1,
-          task_name: "1. podtask",
-          description: "1.opis",
-          done: false,
-        },
-        {
-          task_id: 2,
-          task_name: "2. podtask",
-          description: "2.opis",
-          done: false,
-        },
-      ],
-    },
-  ];
-  console.log("TAAASKS ", data[0].subtasks);
+const Tasks = ({
+  navigation,
+  activeTaskType2,
+  setNumberOfTasks,
+  isParent,
+  data,
+}) => {
   const isLoading = false;
   const error = false;
   const [selectedTask, setSelectedTask] = useState();
-
+  const [src, setSrc] = useState(null);
   const currentDate = new Date();
 
   const options = { day: "2-digit", month: "2-digit", year: "numeric" };
@@ -151,9 +40,9 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks, isParent }) => {
 
   const filteredData = data.filter((item) => {
     if (activeTaskType2 === "Danas") {
-      return formattedCurrentDate === item.date;
+      return formattedCurrentDate === item.deadline;
     } else if (activeTaskType2 === "Sedmica") {
-      const [day, month, year] = item.date.split("/");
+      const [day, month, year] = item.deadline.split("/");
       const taskDate = new Date(year, month - 1, day);
 
       return taskDate >= firstDayOfWeek && taskDate <= lastDayOfWeek;
@@ -174,9 +63,9 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks, isParent }) => {
     // navigation.navigate("SelectedTask", { data: item });
     // console.log("ITEEEEEM", item);
 
-    navigation.navigate("NestedDrawer", {
+    navigation.navigate("MyDrawer", {
       screen: "SelectedTask",
-      params: { data: item },
+      params: { data: item, isParent: isParent, src: src },
     });
   };
   const handleAddPress = () => {
@@ -212,6 +101,8 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks, isParent }) => {
                       item={item}
                       selectedTask={selectedTask}
                       handleCardPress={handleCardPress}
+                      src={src}
+                      setSrc={setSrc}
                     />
                     <AddCommonCard handleAddPress={handleAddPress} />
                   </>
@@ -222,6 +113,8 @@ const Tasks = ({ navigation, activeTaskType2, setNumberOfTasks, isParent }) => {
                     item={item}
                     selectedTask={selectedTask}
                     handleCardPress={handleCardPress}
+                    src={src}
+                    setSrc={setSrc}
                   />
                 );
               }

@@ -9,24 +9,26 @@ export const AuthProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const { isParent  } = useContext(IsParentContext);
-  const login = (email, password) => {
-    setIsLoading(true);
+  const [tasks, setTasks] = useState([]);
+  const [subtasks, setSubtasks] = useState([]);
 
-    axios.post(`${BASE_URL}/login`, {
+  const login = async (email, password) => {
+    setIsLoading(true);
+    try{
+    const response = await axios.post(`${BASE_URL}/login`, {
       email,
       password
     })
-      .then(res => {
-        let userInfo = res.data;
+      
+        let userInfo = response.data;
         setUserInfo(userInfo);
         AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
         setIsLoading(false);
-        
-      })
-      .catch(e => {
+  
+  }catch(e){
         console.log(`login error ${e}`);
         setIsLoading(false);
-      });
+      };
   };
   const loginChild = (code) => {
     setIsLoading(true);
@@ -214,6 +216,7 @@ const addTask = async (task) => {
     
     
     setIsLoading(false);
+    getTasks()
     return true;
   } catch (error) {
     console.error("Error adding task:", error);
@@ -222,10 +225,47 @@ const addTask = async (task) => {
   }
 }
 
-  
+const getTasks = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/tasks`, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json'
+      },
+      params: {
+        isParent: isParent
+      }
+    });
+    console.log(response.data)
+    setTasks(response.data)
+    return response.data; // Handle the response data as per your requirement
+
+  } catch (error) {
+    console.log(error.response.data); // Handle any error that occurs during the request
+  }
+};
+
+const getSubtasks = async(taskId) =>{
+  try {
+    const response = await axios.get(`${BASE_URL}/subtasks/${taskId}`, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(response.data)
+    setSubtasks(response.data)
+    return response.data; // Handle the response data as per your requirement
+
+  } catch (error) {
+    console.log(error.response.data); // Handle any error that occurs during the request
+  }
+}
   
   return (
-    <AuthContext.Provider value={{ isLoading, userInfo, isParent, login, logout, loginChild, uploadProfileImageChild,uploadProfileImageParent, addTask }}>
+    <AuthContext.Provider value={{ isLoading, userInfo, isParent, login, logout, loginChild, uploadProfileImageChild,uploadProfileImageParent, addTask, getTasks, tasks, getSubtasks, subtasks }}>
       {children}
     </AuthContext.Provider>
   );

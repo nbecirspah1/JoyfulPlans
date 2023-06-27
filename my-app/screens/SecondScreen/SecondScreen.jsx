@@ -12,7 +12,7 @@ import { COLORS, SIZES, images } from "../../constants";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import { IsParentContext } from "../loginandregister/IsParentContext";
-
+import { requestMediaLibraryPermission } from "../../components/utils/utils";
 const { height } = Dimensions.get("window");
 
 export default function SecondScreen() {
@@ -21,12 +21,18 @@ export default function SecondScreen() {
   // const route = useRoute();
   // const data = route.params?.data;
   const [showSelectedTask, setShowSelectedTask] = React.useState(false);
-  const { userInfo } = useContext(AuthContext);
-  // console.log("Received data:", data);
+  const { isLoading, userInfo, getTasks, tasks } = useContext(AuthContext);
+  let importantTasks = tasks.filter((task) => task.important === true);
+  let unimportantTasks = tasks.filter((task) => task.important === false);
 
   const [activeTaskType2, setActiveTaskType2] = useState("Sve");
   const [numberOfImportantTasks, setNumberOfImportantTasks] = useState(0);
   const [numberOfTasks, setNumberOfTasks] = useState(0);
+
+  useEffect(() => {
+    requestMediaLibraryPermission();
+    getTasks();
+  }, []);
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
@@ -53,6 +59,7 @@ export default function SecondScreen() {
             activeTaskType2={activeTaskType2}
             setNumberOfImportantTasks={setNumberOfImportantTasks}
             userInfo={userInfo}
+            data={importantTasks}
           />
           <Tasks
             isParent={isParent}
@@ -60,6 +67,7 @@ export default function SecondScreen() {
             activeTaskType2={activeTaskType2}
             setNumberOfTasks={setNumberOfTasks}
             userInfo={userInfo}
+            data={unimportantTasks}
           />
         </View>
       </ScrollView>

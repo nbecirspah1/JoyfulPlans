@@ -18,127 +18,12 @@ const ImportantTasks = ({
   activeTaskType2,
   setNumberOfImportantTasks,
   isParent,
+  data,
 }) => {
-  // const router = useRouter();
-  // const isLoading = false;
-  // const error = false;
-  // const { data, isLoading, error } = useFetch("search", {
-  //   query: "React developer",
-  //   num_pages: 1,
-  // });
-  // const activeTaskType = useState(getActiveTaskType());
-  const data = [
-    {
-      task_id: 1,
-      task_name: "Complete project report",
-      employer_logo: require("../../../assets/images/pranjeSudja.png"),
-      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "07/06/2023",
-      task_type: "kuća",
-      subtasks: [
-        {
-          task_id: 1,
-          task_name: "1. podtask",
-          description: "1.opis",
-          done: false,
-        },
-        {
-          task_id: 2,
-          task_name: "2. podtask",
-          description: "2.opis",
-          done: false,
-        },
-        {
-          task_id: 3,
-          task_name: "3. podtask",
-          description: "3.opis",
-          done: false,
-        },
-        {
-          task_id: 4,
-          task_name: "4. podtask",
-          description: "4.opis",
-          done: false,
-        },
-        {
-          task_id: 5,
-          task_name: "5. podtask",
-          description: "5.opis",
-          done: false,
-        },
-      ],
-    },
-    {
-      task_id: 2,
-      task_name: "Prepare for meeting",
-      employer_logo: require("../../../assets/images/pranjeSudja.png"),
-      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "07/06/2023",
-      task_type: "higijena",
-      subtasks: [
-        {
-          task_id: 1,
-          task_name: "1. podtask",
-          description: "1.opis",
-          done: false,
-        },
-        {
-          task_id: 2,
-          task_name: "2. podtask",
-          description: "2.opis",
-          done: false,
-        },
-      ],
-    },
-    {
-      task_id: 3,
-      task_name: "Follow up with clients",
-      employer_logo: require("../../../assets/images/pranjeSudja.png"),
-      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "09/06/2023",
-      task_type: "škola",
-      subtasks: [
-        {
-          task_id: 1,
-          task_name: "1. podtask",
-          description: "1.opis",
-          done: false,
-        },
-        {
-          task_id: 2,
-          task_name: "2. podtask",
-          description: "2.opis",
-          done: false,
-        },
-      ],
-    },
-    {
-      task_id: 4,
-      task_name: "Organize files",
-      employer_logo: require("../../../assets/images/pranjeSudja.png"),
-      description: "Potrebno je zavrsiti project report tako da bla bla nbla",
-      date: "15/06/2023",
-      task_type: "škola",
-      subtasks: [
-        {
-          task_id: 1,
-          task_name: "1. podtask",
-          description: "1.opis",
-          done: false,
-        },
-        {
-          task_id: 2,
-          task_name: "2. podtask",
-          description: "2.opis",
-          done: false,
-        },
-      ],
-    },
-  ];
   const isLoading = false;
   const error = false;
   const currentDate = new Date();
-
+  const [src, setSrc] = useState(null);
   const options = { day: "2-digit", month: "2-digit", year: "numeric" };
   const formattedCurrentDate = currentDate.toLocaleDateString("en-GB", options);
 
@@ -161,9 +46,9 @@ const ImportantTasks = ({
 
   const filteredData = data.filter((item) => {
     if (activeTaskType2 === "Danas") {
-      return formattedCurrentDate === item.date;
+      return formattedCurrentDate === item.deadline;
     } else if (activeTaskType2 === "Sedmica") {
-      const [day, month, year] = item.date.split("/");
+      const [day, month, year] = item.deadline.split("/");
       const taskDate = new Date(year, month - 1, day);
 
       return taskDate >= firstDayOfWeek && taskDate <= lastDayOfWeek;
@@ -195,7 +80,7 @@ const ImportantTasks = ({
     setShowSelectedTask(true);
     navigation.navigate("MyDrawer", {
       screen: "SelectedTask",
-      params: { data: item, isParent: isParent },
+      params: { data: item, isParent: isParent, src: src },
     });
   };
   const handleAddPress = () => {
@@ -231,6 +116,8 @@ const ImportantTasks = ({
                         item={item}
                         selectedTask={selectedTask}
                         handleCardPress={handleCardPress}
+                        src={src}
+                        setSrc={setSrc}
                       />
                       <AddCard handleAddPress={handleAddPress} />
                     </>
@@ -241,6 +128,9 @@ const ImportantTasks = ({
                       item={item}
                       selectedTask={selectedTask}
                       handleCardPress={handleCardPress}
+                      src={src}
+                      setSrc={setSrc}
+                      s
                     />
                   );
                 }

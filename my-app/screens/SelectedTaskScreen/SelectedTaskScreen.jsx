@@ -32,13 +32,21 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import { FONT, SIZES, COLORS, images } from "../../constants";
 import { FontAwesome } from "@expo/vector-icons";
 import { IsParentContext } from "../loginandregister/IsParentContext";
-
+import { AuthContext } from "../../context/AuthContext";
 const SelectedTaskScreen = () => {
   const route = useRoute();
   const receivedData = route.params?.data;
+  const src = route.params?.src;
   const { isParent } = useContext(IsParentContext);
+  const { tasks, getSubtasks } = useContext(AuthContext);
   const navigation = useNavigation();
-
+  receivedData.subtasks = tasks;
+  const dateString = receivedData.deadline;
+  const date = new Date(dateString);
+  const formattedDate = date.toLocaleDateString("en-GB");
+  useEffect(() => {
+    getSubtasks(receivedData.task_id);
+  }, []);
   // const numItems = receivedData.subtasks.length(); // Number of progressBarItems
   const [visible, setVisible] = React.useState(false);
   const spin = useSharedValue(0);
@@ -203,7 +211,7 @@ const SelectedTaskScreen = () => {
                 marginLeft: 10,
               }}
             >
-              Uraditi do: {receivedData.date}
+              Uraditi do: {formattedDate}
             </Text>
           </View>
 
@@ -216,7 +224,7 @@ const SelectedTaskScreen = () => {
           >
             <Animated.View style={[styles.front, frontAnimatedStyle]}>
               <Image
-                source={receivedData.employer_logo}
+                source={src ? { uri: src } : images.profile}
                 style={styles.image}
                 resizeMode="contain"
               />

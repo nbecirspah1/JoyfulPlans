@@ -3,18 +3,30 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useState, useEffect } from "react";
 import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import styles from "./taskcard.style";
-import { COLORS } from "../../../constants";
+import { COLORS, images } from "../../../constants";
+import * as ImagePicker from "expo-image-picker";
+import { requestMediaLibraryPermission } from "../../utils/utils";
+
 // import { checkImageURL } from "../../../../utils";
-const TaskCard = ({ item, task, handleCardPress }) => {
+const TaskCard = ({ item, selcetedTask, handleCardPress, src, setSrc }) => {
   const [iconName, setIconName] = useState("");
 
   useEffect(() => {
-    if (item.task_type === "škola") {
+    if (item.category === "Škola") {
       setIconName("graduation-cap");
-    } else if (item.task_type === "higijena") {
+    } else if (item.category === "Higijena") {
       setIconName("shower");
-    } else if (item.task_type === "kuća") {
+    } else if (item.category === "Kuća") {
       setIconName("home");
+    }
+    // requestMediaLibraryPermission();
+    if (item.task_image) {
+      const base64WithoutPrefix = item.task_image.substring(
+        item.task_image.indexOf(",") + 1
+      );
+      setSrc(
+        `https://drive.google.com/uc?export=view&id=${base64WithoutPrefix}`
+      );
     }
   }, []);
   return (
@@ -27,15 +39,7 @@ const TaskCard = ({ item, task, handleCardPress }) => {
         onPress={() => handleCardPress(item)}
       >
         <Image
-          source={
-            item.employer_logo
-
-            // {
-            // uri: checkImageURL(task.employer_logo)
-            // ? task.employer_logo
-            // : "https://cvbay.com/wp-content/uploads/2017/03/dummy-image.jpg",
-          }
-          // }
+          source={src ? { uri: src } : images.profile}
           resizeMode="contain"
           style={styles.logoImage}
         />

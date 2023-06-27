@@ -719,3 +719,74 @@ app.post('/addSubtasks/:id', (req, res) => {
     res.status(200).send('Subtasks added successfully!');
   });
 });
+
+
+app.get('/tasks', (req, res)=>{
+  const isParent = req.body.isParent
+  const authorizationHeader = req.headers.authorization;
+  if (!authorizationHeader) {
+    res.status(401).send('Unauthorized');
+    return;
+  }
+  const token = authorizationHeader.replace('Bearer ', '');
+  jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
+    if (err) {
+      console.log(err.message);
+      res.status(401).send('Invalid token');
+      return;
+    }
+    const userId = decoded.userId;
+    if(isParent){
+      let childIDQuery = `select id from children where parentid='${userId}'`
+      let childID = undefined
+      client.query(childIDQuery, (err, result) =>{
+       if(!err){
+         childID=result.rows
+         client.query(`Select * from tasks where child_id='${childID}'`, (err, result)=>{
+          if(!err){
+              res.send(result.rows);
+          }else{
+              console.log(err.message)
+          }
+      });
+       }else{
+        console.log(err.message)
+       }
+      })
+    }else{
+      client.query(`Select * from tasks where child_id='${userId}'`, (err, result)=>{
+        if(!err){
+            res.send(result.rows);
+        }else{
+            console.log(err.message)
+        }
+    });
+    }
+  });
+})
+
+app.get('/subtasks/:id', (req, res)=>{
+  const task_id= req.params.id
+  const authorizationHeader = req.headers.authorization;
+  if (!authorizationHeader) {
+    res.status(401).send('Unauthorized');
+    return;
+  }
+  const token = authorizationHeader.replace('Bearer ', '');
+  jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
+    if (err) {
+      console.log(err.message);
+      res.status(401).send('Invalid token');
+      return;
+    }
+         childID=result.rows
+         client.query(`Select * from subtasks where task_id='${task_id}'`, (err, result)=>{
+          if(!err){
+              res.send(result.rows);
+          }else{
+              console.log(err.message)
+          }
+      });
+      
+})
+})

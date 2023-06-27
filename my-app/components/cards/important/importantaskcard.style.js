@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     width: 250,
     padding: SIZES.xLarge,
     // backgroundColor: selectedTask === item.task_id  ? COLORS.paleGreen : "#FFF",
-    backgroundColor: item.task_type === "kuća" ? "#FBEA73" : item.task_type === "higijena" ? "#D4ADF8" : COLORS.lightWhite,
+    backgroundColor: item.category === "Kuća" ? "#FBEA73" : item.category === "Higijena" ? "#D4ADF8" : COLORS.lightWhite,
     borderRadius: SIZES.medium,
     justifyContent: "space-between",
     ...SHADOWS.medium,
