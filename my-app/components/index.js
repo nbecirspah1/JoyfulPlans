@@ -15,6 +15,7 @@ import ModalPopup from "./Modal/Modal"
 import DonutChart from "./DonutChart/DonutChart"
 import AnimatedTyping from "./animated/AnimatedTyping"
 import Timer from "./cards/timer/TImer";
+import AudioTask from "./audio/AudioTask";
 export {
   ScreenHeaderBtn,
   Welcome,
@@ -32,5 +33,6 @@ export {
   AddCommonCard,
   AddSubtask,
   SubtaskCard,
-  Timer
+  Timer,
+  AudioTask
 };

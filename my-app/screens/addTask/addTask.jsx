@@ -213,6 +213,7 @@ const AddTask = () => {
       important: isImportant,
       subtasks: subtasks,
       audio: audioUri,
+      audio_duration: timer,
     };
     if (addTask(task)) {
       setTask_name(null);
@@ -309,6 +310,9 @@ const AddTask = () => {
               <TouchableOpacity
                 onPress={() => {
                   stopRecording();
+                  if (!playingSound) {
+                    stopSound();
+                  }
                   setVisible(false);
                 }}
               >

@@ -659,8 +659,8 @@ app.post("/login", (req, res) => {
         if(!err){
           childID=result.rows
           console.log("childID:", childID)
-          let insertQuery = `INSERT INTO tasks (task_name, child_id, description, deadline, category, important) 
-                   VALUES ('${task.task_name}', '${childID[0].id}', '${task.description}', '${task.deadline}', '${task.category}', '${task.important}' )
+          let insertQuery = `INSERT INTO tasks (task_name, child_id, description, deadline, category, important, audio_duration) 
+                   VALUES ('${task.task_name}', '${childID[0].id}', '${task.description}', '${task.deadline}', '${task.category}', '${task.important}', '${task.audio_duration}' )
                    RETURNING task_id`;
 
    

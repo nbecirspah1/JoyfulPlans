@@ -26,6 +26,7 @@ import {
   ModalPopup,
   DonutChart,
   Timer,
+  AudioTask,
 } from "../../components";
 // import { styles } from "./selectedtaskcreen.style";
 import { useRoute, useNavigation } from "@react-navigation/native";
@@ -108,14 +109,9 @@ const SelectedTaskScreen = () => {
         <View
           style={{
             flex: 1,
-            minHeight: height,
             padding: SIZES.xSmall,
             backgroundColor: COLORS.lavander,
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            padding: SIZES.padding,
+            paddingVertical: SIZES.padding,
           }}
         >
           <Spinner visible={isLoading} />
@@ -243,6 +239,14 @@ const SelectedTaskScreen = () => {
               <Text style={styles.textBack}>{receivedData.description}</Text>
             </Animated.View>
           </TouchableOpacity>
+          <View style={styles.audioTaskContainer}>
+            {receivedData.task_audio != null && (
+              <AudioTask
+                task_audio={receivedData.task_audio}
+                audio_duration={receivedData.audio_duration}
+              />
+            )}
+          </View>
           <ScrollView
             horizontal
             contentContainerStyle={{
@@ -342,5 +346,11 @@ const styles = StyleSheet.create({
   lottieContainer: {
     justifyContent: "center",
     alignItems: "center",
+  },
+  audioTaskContainer: {
+    marginTop: 20,
+    marginBottom: 20,
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
   },
 });
