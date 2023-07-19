@@ -8,7 +8,13 @@ import * as ImagePicker from "expo-image-picker";
 import { requestMediaLibraryPermission } from "../../utils/utils";
 
 // import { checkImageURL } from "../../../../utils";
-const TaskCard = ({ navigation, item, setSelectedTask, isParent }) => {
+const TaskCard = ({
+  navigation,
+  item,
+  setSelectedTask,
+  isParent,
+  setShowSelectedTask,
+}) => {
   const [iconName, setIconName] = useState("");
   const [src1, setSrc1] = useState(null);
 
@@ -33,7 +39,7 @@ const TaskCard = ({ navigation, item, setSelectedTask, isParent }) => {
 
   const handleCardPress = (item) => {
     setSelectedTask(item.task_id);
-
+    setShowSelectedTask(true);
     navigation.navigate("MyDrawer", {
       screen: "SelectedTask",
       params: { data: item, isParent: isParent, src: src1 },

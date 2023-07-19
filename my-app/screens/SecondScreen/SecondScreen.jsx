@@ -22,8 +22,12 @@ export default function SecondScreen() {
   // const data = route.params?.data;
   const [showSelectedTask, setShowSelectedTask] = React.useState(false);
   const { isLoading, userInfo, getTasks, tasks } = useContext(AuthContext);
-  let importantTasks = tasks.filter((task) => task.important === true);
-  let unimportantTasks = tasks.filter((task) => task.important === false);
+  let importantTasks = tasks.filter(
+    (task) => task.important === true && task.done === false
+  );
+  let unimportantTasks = tasks.filter(
+    (task) => task.important === false && task.done === false
+  );
 
   const [activeTaskType2, setActiveTaskType2] = useState("Sve");
   const [numberOfImportantTasks, setNumberOfImportantTasks] = useState(0);

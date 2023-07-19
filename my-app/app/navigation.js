@@ -29,7 +29,7 @@ function MyDrawer() {
     <ShowSelectedTaskContext.Provider
     value={{ showSelectedTask, setShowSelectedTask }}
   >
-    <Drawer.Navigator
+    <Drawer.Navigator 
     drawerContent = {(props) => <CustomDrawer {...props} />}
     screenOptions={{
       drawerStyle: {
@@ -125,8 +125,8 @@ export default function Navigation() {
     }
   
     return (
-      <NavigationContainer independent={true}>
-        <Stack.Navigator>
+      <NavigationContainer independent={true} >
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           
            {userInfo.token ? (   <Stack.Screen
               options={{ headerShown: false }}

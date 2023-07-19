@@ -827,3 +827,37 @@ app.post('/subtaskdone/:id', (req, res) => {
     });
   });
 });
+
+
+app.post('/taskdone/:id', (req, res) => {
+  const task_id = req.params.id;
+  const authorizationHeader = req.headers.authorization;
+
+  if (!authorizationHeader) {
+    res.status(401).send('Unauthorized');
+    return;
+  }
+
+  const token = authorizationHeader.replace('Bearer ', '');
+
+  jwt.verify(token, 'tajna_za_potpisivanje', (err, decoded) => {
+    if (err) {
+      console.log(err.message);
+      res.status(401).send('Invalid token');
+      return;
+    }
+
+    const query = 'UPDATE tasks SET done = $1 WHERE task_id = $2';
+    const values = [true, task_id];
+
+    client.query(query, values, (err, result) => {
+      if (err) {
+        console.log(err.message);
+        res.status(500).send('Internal server error');
+        return;
+      }
+
+      res.send('Successfully changed');
+    });
+  });
+});

@@ -41,7 +41,7 @@ const SelectedTaskScreen = () => {
   const receivedData = route.params?.data;
   const src = route.params?.src;
   const { isParent } = useContext(IsParentContext);
-  const { isLoading, getSubtasks, subtasks, setSubtaskDone } =
+  const { isLoading, getSubtasks, subtasks, setSubtaskDone, setTaskDone } =
     useContext(AuthContext);
   const navigation = useNavigation();
   receivedData.subtasks = subtasks;
@@ -54,12 +54,26 @@ const SelectedTaskScreen = () => {
     // setPreviousProgressValue(0);
     // setProgressValue(0);
   }, [receivedData]);
+
+  useEffect(() => {
+    if (
+      progressValue * receivedData.subtasks.length ===
+      receivedData.subtasks.length
+    ) {
+      setDone();
+      receivedData.done = true;
+    }
+  }, [progressValue, receivedData.subtasks.length]);
+
   // const numItems = receivedData.subtasks.length(); // Number of progressBarItems
   const [visible, setVisible] = React.useState(false);
   const spin = useSharedValue(0);
 
   const handleImagePress = () => {
     spin.value = spin.value ? 0 : 1;
+  };
+  const setDone = () => {
+    setTaskDone(receivedData.task_id);
   };
   const frontAnimatedStyle = useAnimatedStyle(() => {
     const spinVal = interpolate(spin.value, [0, 1], [0, 180]);
@@ -172,17 +186,20 @@ const SelectedTaskScreen = () => {
                   {receivedData.subtasks.length} {zadatakPadezi}!
                 </Text>
               )}
+
               {progressValue * receivedData.subtasks.length ===
                 receivedData.subtasks.length && (
-                <Text
-                  style={{
-                    marginVertical: 30,
-                    fontSize: 20,
-                    textAlign: "center",
-                  }}
-                >
-                  Čestitamo, uradili ste sve zadatke!
-                </Text>
+                <View>
+                  <Text
+                    style={{
+                      marginVertical: 30,
+                      fontSize: 20,
+                      textAlign: "center",
+                    }}
+                  >
+                    Čestitamo, uradili ste sve zadatke!
+                  </Text>
+                </View>
               )}
             </View>
           </ModalPopup>

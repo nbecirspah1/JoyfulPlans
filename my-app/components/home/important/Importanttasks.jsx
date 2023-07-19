@@ -91,32 +91,16 @@ const ImportantTasks = ({
             <FlatList
               data={filteredData}
               renderItem={({ item, index }) => {
-                if (index === filteredData.length - 1 && isParent) {
-                  return (
-                    <>
-                      <ImportantTaskCard
-                        item={item}
-                        selectedTask={selectedTask}
-                        isParent={isParent}
-                        navigation={navigation}
-                        setSelectedTask={setSelectedTask}
-                        setShowSelectedTask={setShowSelectedTask}
-                      />
-                      <AddCard handleAddPress={handleAddPress} />
-                    </>
-                  );
-                } else {
-                  return (
-                    <ImportantTaskCard
-                      item={item}
-                      selectedTask={selectedTask}
-                      isParent={isParent}
-                      navigation={navigation}
-                      setSelectedTask={setSelectedTask}
-                      setShowSelectedTask={setShowSelectedTask}
-                    />
-                  );
-                }
+                return (
+                  <ImportantTaskCard
+                    item={item}
+                    selectedTask={selectedTask}
+                    isParent={isParent}
+                    navigation={navigation}
+                    setSelectedTask={setSelectedTask}
+                    setShowSelectedTask={setShowSelectedTask}
+                  />
+                );
               }}
               keyExtractor={(item) => item?.task_id}
               contentContainerStyle={{ columnGap: SIZES.medium }}

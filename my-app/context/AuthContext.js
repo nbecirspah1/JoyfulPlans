@@ -295,8 +295,34 @@ const setSubtaskDone = async (subtaskID) => {
 };
 
 
+const setTaskDone = async (taskID) => {
+  try {
+    setIsLoading(true);
+    const response = await axios.post(
+      `${BASE_URL}/taskdone/${taskID}`,
+      {},
+      {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    setIsLoading(false);
+    return response.data; // Return the response data
+
+  } catch (error) {
+    console.log("Error marking task as done:", error.response?.data || error.message);
+    throw error; // Re-throw the error to be handled in the calling function
+  }
+};
+
+
+
   return (
-    <AuthContext.Provider value={{ isLoading, userInfo, isParent, login, logout, loginChild, uploadProfileImageChild,uploadProfileImageParent, addTask, getTasks, tasks, getSubtasks, subtasks, setSubtaskDone }}>
+    <AuthContext.Provider value={{ isLoading, userInfo, isParent, login, logout, loginChild, uploadProfileImageChild,uploadProfileImageParent, addTask, getTasks, tasks, getSubtasks, subtasks, setSubtaskDone, setTaskDone }}>
       {children}
     </AuthContext.Provider>
   );

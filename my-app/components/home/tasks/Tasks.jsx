@@ -1,8 +1,9 @@
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
 // import { useRouter } from "expo-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import styles from "./tasks.style";
 import { COLORS, SIZES } from "../../../constants";
+import ShowSelectedTaskContext from "../../../app/showSelectedTaskContext";
 // import useFetch from "../../../hook/useFetch";
 import { TaskCard, AddCommonCard } from "../../";
 const Tasks = ({
@@ -56,6 +57,8 @@ const Tasks = ({
     setNumberOfTasks(filteredData.length);
   }, [filteredData]);
 
+  const { setShowSelectedTask } = useContext(ShowSelectedTaskContext);
+
   const handleAddPress = () => {
     navigation.navigate("MyDrawer", {
       screen: "Dodaj Zadatak",
@@ -63,39 +66,26 @@ const Tasks = ({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Tasks</Text>
-        <TouchableOpacity>
-          <Text style={styles.headerBtn}>{activeTaskType2}</Text>
-        </TouchableOpacity>
-      </View>
+    <ShowSelectedTaskContext.Provider>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Tasks</Text>
+          <TouchableOpacity>
+            <Text style={styles.headerBtn}>{activeTaskType2}</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.cardsContainer}>
-        {isLoading ? (
-          <ActivityIndicator size="large" colors={COLORS.primary} />
-        ) : error ? (
-          <Text>Something went wrong</Text>
-        ) : filteredData.length === 0 ? (
-          <Text>Nema novih zadataka</Text>
-        ) : (
-          <FlatList
-            data={filteredData}
-            renderItem={({ item, index }) => {
-              if (index === filteredData.length - 1 && isParent) {
-                return (
-                  <>
-                    <TaskCard
-                      item={item}
-                      selectedTask={selectedTask}
-                      navigation={navigation}
-                      isParent={isParent}
-                      setSelectedTask={setSelectedTask}
-                    />
-                    <AddCommonCard handleAddPress={handleAddPress} />
-                  </>
-                );
-              } else {
+        <View style={styles.cardsContainer}>
+          {isLoading ? (
+            <ActivityIndicator size="large" colors={COLORS.primary} />
+          ) : error ? (
+            <Text>Something went wrong</Text>
+          ) : filteredData.length === 0 ? (
+            <Text>Nema novih zadataka</Text>
+          ) : (
+            <FlatList
+              data={filteredData}
+              renderItem={({ item, index }) => {
                 return (
                   <TaskCard
                     item={item}
@@ -103,16 +93,17 @@ const Tasks = ({
                     isParent={isParent}
                     navigation={navigation}
                     setSelectedTask={setSelectedTask}
+                    setShowSelectedTask={setShowSelectedTask}
                   />
                 );
-              }
-            }}
-            keyExtractor={(item) => item?.task_id}
-            contentContainerStyle={{ rowGap: SIZES.small }}
-          />
-        )}
+              }}
+              keyExtractor={(item) => item?.task_id}
+              contentContainerStyle={{ rowGap: SIZES.small }}
+            />
+          )}
+        </View>
       </View>
-    </View>
+    </ShowSelectedTaskContext.Provider>
   );
 };
 
