@@ -69,7 +69,7 @@ const Tasks = ({
     <ShowSelectedTaskContext.Provider>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Tasks</Text>
+          <Text style={styles.headerTitle}>Zadaci</Text>
           <TouchableOpacity>
             <Text style={styles.headerBtn}>{activeTaskType2}</Text>
           </TouchableOpacity>

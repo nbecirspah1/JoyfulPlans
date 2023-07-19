@@ -1,5 +1,6 @@
 import ScreenHeaderBtn from "./header/ScreenHeaderBtn";
 import Welcome from "./welcome/Welcome";
+import DoneTasksWelcome from "./welcome/DoneTasksWelcome";
 import ImportantTaskCard from "./cards/important/ImportantTaskCard"
 import AddCard from "./cards/addCard/AddCard"
 import SubtaskCard from "./cards/subtaskCard/SubtaskCard"
@@ -34,5 +35,6 @@ export {
   AddSubtask,
   SubtaskCard,
   Timer,
-  AudioTask
+  AudioTask,
+  DoneTasksWelcome
 };

@@ -60,7 +60,7 @@ function MyDrawer() {
     // ),
     headerTitle: '',
   }}
-  name="HomeChild"
+  name="Početna"
   component={SecondScreen}
 />
 
@@ -82,7 +82,22 @@ function MyDrawer() {
 />
 }
 
- {showSelectedTask && <Drawer.Screen options={{
+
+
+
+      <Drawer.Screen options={{
+         drawerIcon: ({ color, size }) => (
+          <Feather name="award" color={color} size={size} />
+        ),
+  headerStyle: {backgroundColor: COLORS.lavander},
+  headerShadowVisible: false,
+  // headerRight: () => (
+  //     <ScreenHeaderBtn iconUrl={images.profile} dimensions = "100%"/>
+  // ),
+  headerTitle: ""}}
+ name="Urađeni zadaci" component={Settings} />
+
+{showSelectedTask && <Drawer.Screen options={{
           drawerIcon: ({ color, size }) => (
             <Feather name="bookmark" color={color} size={size} />
           ),
@@ -92,20 +107,7 @@ function MyDrawer() {
   //     <ScreenHeaderBtn iconUrl={images.profile} dimensions = "100%"/>
   // ),
   headerTitle: ""}}
- name="SelectedTask" component={SelectedTaskScreen} />}
-
-
-      <Drawer.Screen options={{
-         drawerIcon: ({ color, size }) => (
-          <Feather name="settings" color={color} size={size} />
-        ),
-  headerStyle: {backgroundColor: COLORS.lavander},
-  headerShadowVisible: false,
-  // headerRight: () => (
-  //     <ScreenHeaderBtn iconUrl={images.profile} dimensions = "100%"/>
-  // ),
-  headerTitle: ""}}
- name="Settings" component={Settings} />
+ name="Odabrani zadatak" component={SelectedTaskScreen} />}
     </Drawer.Navigator>
     </ShowSelectedTaskContext.Provider>
  

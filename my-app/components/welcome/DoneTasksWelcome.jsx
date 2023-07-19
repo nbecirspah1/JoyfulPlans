@@ -12,7 +12,7 @@ import { icons, SIZES, COLORS } from "../../constants";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 const taskTypes = ["Danas", "Sedmica", "Sve"];
 
-const Welcome = ({
+const DoneTasksWelcome = ({
   setActiveTaskType2,
   numberOfImportantTasks,
   numberOfTasks,
@@ -57,45 +57,6 @@ const Welcome = ({
             alignItems: "center",
           }}
         >
-          {iconName === "sunrise" && (
-            <Feather
-              name={iconName}
-              size={40}
-              color={COLORS.primary}
-              style={{
-                marginRight: 16,
-              }}
-            />
-          )}
-          {iconName === "sun-o" && (
-            <FontAwesome
-              name={iconName}
-              size={40}
-              color={COLORS.primary}
-              style={{
-                marginRight: 16,
-              }}
-            />
-          )}
-          {iconName === "moon-o" && (
-            <FontAwesome
-              name={iconName}
-              size={40}
-              color={COLORS.primary}
-              style={{
-                marginRight: 16,
-              }}
-            />
-          )}
-          <Text
-            style={{
-              fontSize: 30,
-              fontWeight: "bold",
-              color: COLORS.primary,
-            }}
-          >
-            {greeting}
-          </Text>
           <Text
             style={{
               fontSize: 20,
@@ -103,9 +64,10 @@ const Welcome = ({
               textAlign: "center",
               color: COLORS.secondary,
               fontWeight: 500,
+              // fontWeight: "bold",
             }}
           >
-            Neurađeni zadaci:
+            Urađeni zadaci:
           </Text>
         </View>
         <View style={styles.quoteContainer}>
@@ -150,4 +112,4 @@ const Welcome = ({
   );
 };
 
-export default Welcome;
+export default DoneTasksWelcome;

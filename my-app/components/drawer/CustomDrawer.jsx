@@ -34,7 +34,7 @@ const CustomDrawer = (props) => {
         <DrawerItemList {...props} drawerActiveTintColor={COLORS.primary} />
       </DrawerContentScrollView>
       <DrawerItem
-        label="logout"
+        label="odjava"
         icon={({ size, color }) => (
           <FontAwesome name="sign-out" size={size} color={color} />
         )}

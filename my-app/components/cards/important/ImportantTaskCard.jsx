@@ -39,7 +39,7 @@ const ImportantTaskCard = ({
     setSelectedTask(item.task_id);
     setShowSelectedTask(true);
     navigation.navigate("MyDrawer", {
-      screen: "SelectedTask",
+      screen: "Odabrani zadatak",
       params: { data: item, isParent: isParent, src: src1 },
     });
   };
