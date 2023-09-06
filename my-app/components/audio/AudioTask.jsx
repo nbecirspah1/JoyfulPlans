@@ -39,7 +39,7 @@ const AudioTask = ({ task_audio, audio_duration }) => {
         setSoundTimer((prevTimer) => prevTimer + 1);
       }, 1000);
       setSoundIntervalId(idSound);
-      if (timer === soundTimer) {
+      if (audio_duration === soundTimer) {
         clearInterval(soundIntervalId);
       }
       sound.setOnPlaybackStatusUpdate(async (status) => {

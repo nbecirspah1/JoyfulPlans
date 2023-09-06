@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: SIZES.medium,
     borderRadius: SIZES.small,
+    marginTop: SIZES.small,
     backgroundColor: item.category === "Kuća" ? "#FBEA73" : item.category === "Higijena" ? "#D4ADF8" : COLORS.lightWhite,
     ...SHADOWS.medium,
     shadowColor: COLORS.white,

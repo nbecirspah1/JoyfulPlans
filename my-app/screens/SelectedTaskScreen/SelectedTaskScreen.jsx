@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useEffect, useContext, useMemo } from "react";
 import LottieView from "lottie-react-native";
 import animationData from "../../assets/animations/confetti.json";
 import {
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Modal,
   Dimensions,
+  FlatList,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -45,25 +46,41 @@ const SelectedTaskScreen = () => {
     useContext(AuthContext);
   const navigation = useNavigation();
   receivedData.subtasks = subtasks;
+  const [progressValue, setProgressValue] = useState(0);
+
   const dateString = receivedData.deadline;
   const date = new Date(dateString);
   const formattedDate = date.toLocaleDateString("en-GB");
-  console.log("RECEIVEEEEEED DATAAAAA", receivedData);
+  function callBeforeAnythingElse() {
+    getSubtasks(receivedData.task_id);
+    setProgressValue(0);
+  }
+  useEffect(() => {
+    callBeforeAnythingElse();
+  }, []);
   useEffect(() => {
     getSubtasks(receivedData.task_id);
-    // setPreviousProgressValue(0);
-    // setProgressValue(0);
-  }, [receivedData]);
+    setProgressValue(0);
+  }, [receivedData.task_id]);
 
-  useEffect(() => {
-    if (
-      progressValue * receivedData.subtasks.length ===
-      receivedData.subtasks.length
-    ) {
-      setDone();
-      receivedData.done = true;
-    }
-  }, [progressValue, receivedData.subtasks.length]);
+  // const doneStates = useMemo(
+  //   () => subtasks.map((item) => item.done),
+  //   [subtasks]
+  // );
+
+  // useEffect(() => {
+  //   const allItemsAreDone = subtasks.every((item) => item.done === true);
+  //   console.log("EVO ME U ONOM JEBENOM USE EFFECTU", allItemsAreDone);
+  //   if (allItemsAreDone) {
+  //     console.log("SVI SU GOTOVIIIIII");
+  //     setDone(receivedData.task_id);
+  //     receivedData.done = true;
+  //   }
+  // }, [doneStates]);
+
+  // async function setDone(task_id) {
+  //   await setTaskDone(task_id);
+  // }
 
   // const numItems = receivedData.subtasks.length(); // Number of progressBarItems
   const [visible, setVisible] = React.useState(false);
@@ -72,9 +89,7 @@ const SelectedTaskScreen = () => {
   const handleImagePress = () => {
     spin.value = spin.value ? 0 : 1;
   };
-  const setDone = () => {
-    setTaskDone(receivedData.task_id);
-  };
+
   const frontAnimatedStyle = useAnimatedStyle(() => {
     const spinVal = interpolate(spin.value, [0, 1], [0, 180]);
     return {
@@ -95,7 +110,7 @@ const SelectedTaskScreen = () => {
       ],
     };
   }, []);
-  const [progressValue, setProgressValue] = useState(0);
+
   const [previousProgressValue, setPreviousProgressValue] = useState(0);
   let zadatakPadezi = "zadataka";
   if (
@@ -264,7 +279,7 @@ const SelectedTaskScreen = () => {
               />
             )}
           </View>
-          <ScrollView
+          {/* <ScrollView
             horizontal
             contentContainerStyle={{
               justifyContent: "center",
@@ -293,7 +308,7 @@ const SelectedTaskScreen = () => {
                     {/* <Text style={{ width: 100, alignSelf: "center" }}>
                 {subtask.task_name}
               </Text> */}
-                    <VerticalProgressBar
+          {/* <VerticalProgressBar
                       item={subtask}
                       setVisible={setVisible}
                       visible={visible}
@@ -307,7 +322,44 @@ const SelectedTaskScreen = () => {
                 ))}
               </View>
             </View>
-          </ScrollView>
+          </ScrollView> */}
+          <View>
+            <Text
+              style={{
+                fontSize: SIZES.h3,
+                color: COLORS.primary,
+                marginBottom: 10,
+                fontWeight: 600,
+              }}
+            >
+              Lista zadataka:
+            </Text>
+            <FlatList
+              horizontal
+              data={receivedData.subtasks}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View>
+                  <VerticalProgressBar
+                    item={item}
+                    setVisible={setVisible}
+                    visible={visible}
+                    receivedData={receivedData}
+                    setProgressValue={setProgressValue}
+                    setPreviousProgressValue={setPreviousProgressValue}
+                    isParent={isParent}
+                    setSubtaskDone={setSubtaskDone}
+                    setTaskDone={setTaskDone}
+                  />
+                </View>
+              )}
+              contentContainerStyle={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
         </View>
       </ScrollView>
     </View>

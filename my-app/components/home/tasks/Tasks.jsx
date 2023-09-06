@@ -83,23 +83,36 @@ const Tasks = ({
           ) : filteredData.length === 0 ? (
             <Text>Nema novih zadataka</Text>
           ) : (
-            <FlatList
-              data={filteredData}
-              renderItem={({ item, index }) => {
-                return (
-                  <TaskCard
-                    item={item}
-                    selectedTask={selectedTask}
-                    isParent={isParent}
-                    navigation={navigation}
-                    setSelectedTask={setSelectedTask}
-                    setShowSelectedTask={setShowSelectedTask}
-                  />
-                );
-              }}
-              keyExtractor={(item) => item?.task_id}
-              contentContainerStyle={{ rowGap: SIZES.small }}
-            />
+            //   <FlatList
+            //     data={filteredData}
+            //     renderItem={({ item, index }) => {
+            //       return (
+            //         <TaskCard
+            //           item={item}
+            //           selectedTask={selectedTask}
+            //           isParent={isParent}
+            //           navigation={navigation}
+            //           setSelectedTask={setSelectedTask}
+            //           setShowSelectedTask={setShowSelectedTask}
+            //         />
+            //       );
+            //     }}
+            //     keyExtractor={(item) => item?.task_id}
+            //     contentContainerStyle={{ rowGap: SIZES.small }}
+            //   />
+            <View>
+              {filteredData.map((item, index) => (
+                <TaskCard
+                  key={item.task_id}
+                  item={item}
+                  selectedTask={selectedTask}
+                  isParent={isParent}
+                  navigation={navigation}
+                  setSelectedTask={setSelectedTask}
+                  setShowSelectedTask={setShowSelectedTask}
+                />
+              ))}
+            </View>
           )}
         </View>
       </View>

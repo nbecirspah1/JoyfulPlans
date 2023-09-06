@@ -127,7 +127,7 @@ export default function Navigation() {
     }
   
     return (
-      <NavigationContainer independent={true} >
+
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           
            {userInfo.token ? (   <Stack.Screen
@@ -142,7 +142,7 @@ export default function Navigation() {
             
           
         </Stack.Navigator>
-      </NavigationContainer>
+
     );
   }
 

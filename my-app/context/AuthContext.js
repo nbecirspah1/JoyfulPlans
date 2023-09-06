@@ -28,7 +28,13 @@ export const AuthProvider = ({ children }) => {
   
   }catch(e){
         console.log(`login error ${e}`);
+
         setIsLoading(false);
+        Alert.alert("Greška pri prijavi", "Molimo, provjerite unesene podatke za e-mail i šifru.", [
+          {
+            text: "OK",
+          },
+        ]);
       };
   };
   const loginChild = (code) => {
@@ -47,6 +53,11 @@ export const AuthProvider = ({ children }) => {
       .catch(e => {
         console.log(`login error ${e}`);
         setIsLoading(false);
+        Alert.alert("Greška pri prijavi", "Molimo, provjerite unesene podatke.", [
+          {
+            text: "OK",
+          },
+        ]);
       });
   };
 

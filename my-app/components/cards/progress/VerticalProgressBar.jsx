@@ -17,6 +17,7 @@ const VerticalProgressBar = ({
   setPreviousProgressValue,
   isParent,
   setSubtaskDone,
+  setTaskDone,
 }) => {
   // const { isLoading, setSubtaskDone } = useContext(AuthContext);
 
@@ -26,13 +27,12 @@ const VerticalProgressBar = ({
   const [iconColor, setIconColor] = useState(
     item.done ? COLORS.icon : "#474838"
   );
-  const [fontWeight, setFontWeight] = useState(item.done ? 500 : 300);
+  const [fontWeight, setFontWeight] = useState(300);
 
   useEffect(() => {
     if (item.done) {
       containerColor.value = COLORS.mintGreen;
       setIconColor(COLORS.icon);
-      setFontWeight(500);
     } else {
       containerColor.value = "#ACAC9A";
       setIconColor("#474838");
@@ -42,7 +42,7 @@ const VerticalProgressBar = ({
     ).length;
     setProgressValue(numItems / receivedData.subtasks.length);
     setPreviousProgressValue((numItems - 1) / receivedData.subtasks.length);
-  }, [item, receivedData, item.done]);
+  }, [receivedData, item.done]);
 
   const handleClick = async () => {
     try {
@@ -54,6 +54,14 @@ const VerticalProgressBar = ({
         setVisible(true);
         await setSubtaskDone(item.subtask_id);
         console.log("Subtask marked as done successfully");
+        const allItemsAreDone = receivedData.subtasks.every(
+          (item) => item.done === true
+        );
+        if (allItemsAreDone) {
+          console.log("SVI SU GOTOVIIIIII");
+          await setTaskDone(receivedData.task_id);
+          receivedData.done = true;
+        }
       }
     } catch (error) {
       console.log(
@@ -93,26 +101,30 @@ const VerticalProgressBar = ({
       ]}
     >
       <TouchableOpacity onPress={handleClick}>
-        <FontAwesome name="check-circle" size={30} color={iconColor} />
+        <View style={{ alignItems: "center" }}>
+          <FontAwesome name="check-circle" size={30} color={iconColor} />
 
-        <Text
-          style={{
-            fontSize: 20,
-            textAlign: "center",
-            fontWeight: 500,
-          }}
-        >
-          {item.name}
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            textAlign: "center",
-            fontWeight: fontWeight,
-          }}
-        >
-          {item.description}
-        </Text>
+          <Text
+            style={{
+              fontSize: 20,
+              textAlign: "center",
+              fontWeight: 500,
+              marginTop: 10,
+            }}
+          >
+            {item.name}
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              textAlign: "center",
+              fontWeight: item.done ? 500 : 300,
+              marginTop: 5,
+            }}
+          >
+            {item.description}
+          </Text>
+        </View>
       </TouchableOpacity>
     </Animated.View>
   );

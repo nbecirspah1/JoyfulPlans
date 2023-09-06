@@ -54,7 +54,12 @@ const UserView = () => {
 
   return (
     <View
-      style={{ height: 200, alignItems: "center", justifyContent: "center" }}
+      style={{
+        height: 200,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 50,
+      }}
     >
       <Spinner visible={isLoading} />
       <TouchableOpacity onPress={uploadImage}>

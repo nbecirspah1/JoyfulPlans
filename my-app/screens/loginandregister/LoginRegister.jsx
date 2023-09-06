@@ -38,12 +38,10 @@ import Animated, {
   runOnUI,
 } from "react-native-reanimated";
 import { COLORS, SIZES, images } from "../../constants";
-import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import Spinner from "react-native-loading-spinner-overlay";
 import { IsParentContext } from "./IsParentContext";
 export default function LoginRegister() {
-  const navigation = useNavigation();
   library.add(faChalkboardTeacher);
   library.add(faChild);
   const [email, setEmail] = useState(null);

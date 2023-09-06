@@ -62,7 +62,7 @@ export default function SecondScreen() {
             navigation={navigation}
             activeTaskType2={activeTaskType2}
             setNumberOfImportantTasks={setNumberOfImportantTasks}
-            userInfo={userInfo}
+            // userInfo={userInfo}
             data={importantTasks}
           />
           <Tasks
